@@ -1,48 +1,58 @@
 import React, {useState, useEffect} from 'react';
-import { View, StyleSheet, SafeAreaView, TouchableOpacity, Text, Button } from 'react-native';
+import {View, StyleSheet, SafeAreaView, TouchableOpacity, Text, Alert} from 'react-native';
 
 import InputSearch from '../components/InputSearch';
 import RenderItems from '../components/RenderItems';
 import Colors from '../constants/Colors';
-import fakeData from '../data/fake-data';
-import { RootTabScreenProps } from '../types';
+import constants from "../constants/constants";
+import {BASE_URL} from "../api/API";
 
-type propsData = {
-  question: string,
-  answers: [],
-  date: Date
-}
-
-export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'>) {
+export default function TabOneScreen({ navigation }) {
 
   const [searchText, setSearchText] = useState('')
-  const [data, setData] = useState<propsData[]>([])
+  const [data, setData] = useState([])
 
   useEffect(() => {
-    setData(fakeData)
+    (async ()=> {
+      try {
+        const response = await fetch(`${BASE_URL}/api/posts`)
+        const data = await response.json()
+        setData(data)
+      } catch (e) {
+        console.error(e)
+        Alert.alert('Error', 'Ошибка соединения с интернетом, попробуйте позже')
+      }
+
+    })()
   }, [])
 
   const searchHandler = () => {
 
-    const filteredPost = fakeData.filter((elem) => {
+    const filteredPost = data.filter((elem) => {
       return elem.question.toLowerCase().includes(searchText.toLowerCase())
     })
-    
+
     setData(filteredPost)
-    setSearchText('')
-  
   }
-  
-  const clearResults = () => {
-    setData(fakeData)
+
+  const clearResults = async () => {
+    try {
+      const response = await fetch(`${BASE_URL}/api/posts`)
+      const data = await response.json()
+      setData(data)
+    } catch (e) {
+      console.error(e)
+      Alert.alert('Error', 'Ошибка соединения с интернетом, попробуйте позже')
+    }
   }
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.container}>
         <View style={styles.searchContainer}>
-          <Text style={styles.searchTitle}>Введите ваш вопрос</Text>
-          <Text style={styles.searchTitle}>{searchText}</Text>
+          <Text style={styles.searchTitle}>{new Date().toLocaleString()}</Text>
+          <Text style={styles.searchTitle}>{constants.GREETING}</Text>
+          <Text style={styles.searchTitle}>{constants.SHAHADA}</Text>
           <InputSearch setSearchText={setSearchText} searchText={searchText} />
 
           <View style={{flexDirection: 'row'}}>
@@ -63,7 +73,16 @@ export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'
           </View>
         </View>
 
-        <RenderItems data={data}/>
+        {data ? <RenderItems data={data}/>: (
+            <TouchableOpacity
+                style={styles.button}
+                onPress={clearResults}
+            >
+              <Text style={{textAlign: 'center', color: '#fff'}}
+                    onPress={clearResults}
+              >Похоже у вас нет соединения с интернетом, Повторите запрос</Text>
+            </TouchableOpacity>
+        )}
       </View>
     </SafeAreaView>
   );

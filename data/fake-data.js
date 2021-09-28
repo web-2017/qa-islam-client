@@ -4,7 +4,7 @@ export default fakeData = [
 		question: 'Если отец давал развод матери будучи пьяным, развод считается',
 		sheikh: 'Шейх Абдуллах Костекский',
 		answer: 'Тут разногласия ученых, Имам Шафий говорит да, считается развод',
-		disagreements: true,
+		extra: null,
 		isStrong: true,
 		date: new Date(),
 	},
@@ -14,8 +14,8 @@ export default fakeData = [
 		answer: 'Является не желательным, Пророк Мухаммад с.а.с сказал: не вырывайте седину, поистине это является нуром для верующих в судный день.',
 		extra: 'Седину можно красить в любой цвет, кроме черного, большинство ученных говорят что в черный цыет красить волосы для мужчик харам, кроме джихада',
 		sheikh: 'Шейх Абдуллах Костекский',
-		isStrongAnswer: false,
 		date: new Date(),
+		isStrong: true,
 	},
 	{
 		id: 3,
@@ -23,7 +23,7 @@ export default fakeData = [
 		answer: 'Нет нельзя, надо на арабском языке',
 		extra: null,
 		sheikh: 'Шейх Абдуллах Костекский',
-		isStrongAnswer: false,
 		date: new Date(),
+		isStrong: true,
 	},
 ]

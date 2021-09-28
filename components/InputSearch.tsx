@@ -11,7 +11,7 @@ export default function InputSearch({searchText, setSearchText}: {searchText: St
         <TextInput
           placeholder='Поиск'
           onChangeText={text => setSearchText(text)}
-          defaultValue={searchText}
+          defaultValue={searchText as string}
         />
       </View>
     </View>
