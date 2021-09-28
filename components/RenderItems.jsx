@@ -2,9 +2,8 @@ import React, {useState, useEffect} from 'react'
 import { View, Text, TextInput, StyleSheet, FlatList } from 'react-native'
 import Colors from '../constants/Colors'
 import {Ionicons} from "@expo/vector-icons";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export default function RenderItems({data, user, editPostHandler}) {
+export default function RenderItems({data, user, navigation}) {
 
   const Item = ({item}) => {
     return  (
@@ -14,7 +13,10 @@ export default function RenderItems({data, user, editPostHandler}) {
               user?._id &&
               <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end' }}>
                 <Ionicons
-                    onPress={() => editPostHandler(item._id)}
+                    // onPress={() => editPostHandler(item._id)}
+                    onPress={() => navigation.navigate('Modal', {
+                      postId: item._id, userToken: user.token,
+                    })}
                     name={'create-outline'} size={20}
                     style={{
                       color: 'green',
@@ -32,6 +34,7 @@ export default function RenderItems({data, user, editPostHandler}) {
             <Text style={[styles.text, styles.title]}>{item.question}{' '}?</Text>
             <Text style={{fontWeight: '600'}} style={styles.label}>{item?.sheikh}</Text>
             <Text style={styles.original}>{item?.answer}</Text>
+            {item?.extra ? <Text style={styles.extra}>{item?.extra}</Text> : null}
           </View>
       </View>
     )
@@ -85,7 +88,16 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginVertical: 4,
     borderRadius: 6,
-    overflow: 'hidden'
+    overflow: 'hidden',
+    textAlign: 'justify',
+  },
+  extra: {
+    backgroundColor: Colors.light.green,
+    color: '#fff',
+    padding: 10,
+    borderRadius: 5,
+    fontSize: 16,
+    textAlign: 'justify',
   },
   content: {},
 })

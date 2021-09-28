@@ -1,106 +1,168 @@
 import React, {useState, useEffect} from 'react';
 import { StatusBar } from 'expo-status-bar';
-import {Platform, StyleSheet, TextInput, TouchableOpacity} from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {Platform, StyleSheet, TextInput, TouchableOpacity, Text, View, ScrollView, Alert} from 'react-native';
 
-import { Text, View } from '../components/Themed';
 import {BASE_URL} from "../api/API";
-import {storeData} from "../config/storage";
+import Colors from "../constants/Colors";
 
 
-export default function ModalScreen({navigation}) {
-    console.log(navigation)
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+export default function ModalScreen({route, navigation}: any) {
+    const {postId, userToken} = route.params
+    const [question, setQuestion] = useState('');
+    const [answer, setAnswer] = useState('');
+    const [sheikh, setSheikh] = useState('');
+    const [extra, setExtra] = useState('');
+    const [token, setToken] = useState(userToken);
     
     useEffect(() => {
-        
-        // Если в уже есть пользователь то идем на страницу создания
-        (async () => {
+        getCurrentPost()
+    }, [postId, token]);
     
-            const isUserExist = await AsyncStorage.getItem('user')
+    
+    // read post
+    const getCurrentPost = async () => {
+        try {
+            const response  = await fetch(`${BASE_URL}/api/post/${postId}`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+              },
+            })
+            const post = await response.json()
             
-            if(isUserExist) {
-    
-                const parseUserData = await JSON.parse(isUserExist)
-    
-                if(parseUserData.user.role === 'ADMIN') {
-                    console.log(11)
-                    navigation.navigate('Create', { name: 'ScreenCreate' })
-                }
-            }
-        })()
-    }, []);
-    
+            setQuestion(post.question)
+            setAnswer(post.answer)
+            setSheikh(post.sheikh)
+            setExtra(post.extra)
+            
+        } catch (e) {
+          console.error(e)
+        }
+  }
   
-  
-  const logInHandler = async () => {
+  // edit post
+  const editPostHandler = async () => {
     try {
-        const response  = await fetch(`${BASE_URL}/api/signin`, {
-            method: 'POST',
+        const response = await fetch(`${BASE_URL}/api/update`, {
+            method: 'PUT',
             headers: {
-                'Content-type': 'application/json'
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify({
-                email, password
+                postId: postId,
+                question,
+                answer,
+                sheikh,
+                extra
             })
         })
-        const data = await response.json()
-        
-        const saveInStorage = await storeData(data, 'user')
-        const readStorageData = await AsyncStorage.getItem('user')
     
-        console.log(data)
-        console.log('saveInStorage', readStorageData)
-        
-        
-    } catch (e) {
-      console.error(e)
+        const updatedPost = await response.json()
+    
+        if(response.status === 200) {
+            setExtra('')
+            setQuestion('')
+            setSheikh('')
+            setAnswer('')
+            return navigation.navigate('Home')
+        }
+    
+        response.status !== 200 && Alert.alert('Error', updatedPost.message)
+    }catch (e) {
+        console.error(e)
     }
   }
   
   return (
-    <View style={styles.container}>
-      {/* Use a light status bar on iOS to account for the black space above the modal */}
-      <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
-      <Text style={styles.title}>Only admin</Text>
-      <TextInput
-          placeholder='email'
-          onChangeText={email => setEmail(email)}
-          defaultValue={email.toLocaleLowerCase()}
-          autoCompleteType={'email'}
-      />
-      <TextInput
-          placeholder='password'
-          onChangeText={p => setPassword(p)}
-          defaultValue={password}
-          autoCompleteType={'password'}
-      />
-      <TouchableOpacity
-          style={styles.button}
-          onPress={logInHandler}
+      <ScrollView
+          contentContainerStyle={styles.container}
       >
-        <Text style={{textAlign: 'center', }}>войти</Text>
-      </TouchableOpacity>
-      
-    </View>
+        <View style={styles.container}>
+          {/* Use a light status bar on iOS to account for the black space above the modal */}
+          <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
+          <Text style={styles.title}>Only admin</Text>
+            
+                <Text style={styles.title}>Изменить пост</Text>
+                {/*<Button onPress={() => navigation.goBack()} title="Go back home" />*/}
+            
+                <View>
+                    <Text>Введите ваш вопрос</Text>
+                    <TextInput
+                        placeholder={'Вопрос'}
+                        style={styles.input}
+                        onChangeText={(value) => setQuestion(value)}
+                        clearButtonMode={'always'}
+                        multiline={true}
+                        defaultValue={question}
+                    />
+                </View>
+                <View>
+                    <Text>Шейх</Text>
+                    <TextInput
+                        placeholder={'Шейх'}
+                        onChangeText={(value) => setSheikh(value)}
+                        style={styles.input}
+                        clearButtonMode={'always'}
+                        defaultValue={sheikh}
+                    />
+                </View>
+                <View>
+                    <Text>Ответ</Text>
+                    <TextInput
+                        placeholder={'answer'}
+                        onChangeText={(value) => setAnswer(value)}
+                        style={styles.input}
+                        clearButtonMode={'always'}
+                        multiline={true}
+                        defaultValue={answer}
+                    />
+                </View>
+                <View>
+                    <Text>Дополнительно</Text>
+                    <TextInput
+                        placeholder={'Дополнительно'}
+                        onChangeText={(value) => setExtra(value)}
+                        style={styles.input}
+                        clearButtonMode={'always'}
+                        multiline={true}
+                        defaultValue={extra}
+                    />
+                </View>
+                <TouchableOpacity
+                    onPress={() => editPostHandler()}
+                    style={styles.button}
+                >
+                    <Text style={{color: '#fff'}}>Сохранить</Text>
+                </TouchableOpacity>
+        </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  button: {},
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
-  },
+    container: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    title: {
+        fontSize: 20,
+        fontWeight: '500',
+        marginVertical: 30,
+        textAlign: 'center'
+    },
+    input: {
+        borderWidth: 1,
+        marginVertical: 3,
+        borderColor: Colors.light.blue,
+        padding: 5,
+        minWidth: '90%',
+        maxWidth: '90%',
+        borderRadius: 6
+    },
+    button: {
+        marginVertical: 20, backgroundColor: Colors.light.blue, padding: 15,
+        borderRadius: 6
+    }
 });

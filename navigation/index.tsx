@@ -14,10 +14,30 @@ import HomeScreen from '../screens/HomeScreen';
 import LogInScreen from '../screens/LogInScreen.js'
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import ModalScreen from "../screens/ModalScreen";
+import {createStackNavigator} from "@react-navigation/stack";
 
 const Drawer = createDrawerNavigator();
+const RootStack = createStackNavigator();
 
-export default function Navigation() {
+function RootStackScreen() {
+    return (
+        <RootStack.Navigator>
+            <RootStack.Group>
+                <RootStack.Screen
+                    name="Home"
+                    component={HomeScreen}
+                    options={{headerShown: false}}
+                />
+            </RootStack.Group>
+            <RootStack.Group screenOptions={{ presentation: 'modal' }}>
+                <RootStack.Screen name="Modal" component={ModalScreen} />
+            </RootStack.Group>
+        </RootStack.Navigator>
+    )
+}
+
+export default function Navigation({navigation}) {
     
     const [isAuth, setIsAuth] = useState(null);
     
@@ -39,12 +59,13 @@ export default function Navigation() {
     return (
       <NavigationContainer>
           <Drawer.Navigator>
-              <Drawer.Screen name='Home' component={HomeScreen}
-                             options={{
-                                 headerRight: (() => <Ionicons name={'search'}/>),
-                                 title: 'Ислам',
-                                 headerTitleAlign: 'center',
-                             }}
+              <Drawer.Screen
+                  name='Root' component={RootStackScreen}
+                 options={{
+                     headerRight: (() => <Ionicons name={'search'}/>),
+                     title: 'Ислам',
+                     headerTitleAlign: 'center',
+                 }}
               />
               {isAuth && <Drawer.Screen name='Create' component={CreatePostScreen} />}
               {!isAuth && <Drawer.Screen name='LogIn' component={LogInScreen} />}
@@ -52,6 +73,8 @@ export default function Navigation() {
       </NavigationContainer>
   );
 }
+
+
 
 /**
  * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/

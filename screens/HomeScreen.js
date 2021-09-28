@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {View, StyleSheet, SafeAreaView, TouchableOpacity, Text, Alert} from 'react-native';
+import {View, StyleSheet, SafeAreaView, TouchableOpacity, Text, Alert, Button} from 'react-native';
 
 import InputSearch from '../components/InputSearch';
 import RenderItems from '../components/RenderItems';
@@ -15,6 +15,15 @@ export default function TabOneScreen({ navigation }) {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', async () => {
+      await getAllPosts()
+    });
+
+    // Return the function to unsubscribe from the event so it gets removed on unmount
+    return unsubscribe;
+  }, [navigation]);
+
+  useEffect(() => {
     (async () => {
       const isUser = await AsyncStorage.getItem('user')
 
@@ -23,23 +32,18 @@ export default function TabOneScreen({ navigation }) {
         setUser(parseIsUser)
       }
     })()
-  }, []);
+  }, [navigation]);
 
-
-  useEffect(() => {
-    (async ()=> {
-      try {
-        const response = await fetch(`${BASE_URL}/api/posts`)
-        const data = await response.json()
-        setPosts(data)
-      } catch (e) {
-        console.error(e)
-        Alert.alert('Error', 'Ошибка соединения с интернетом, попробуйте позже')
-      }
-
-    })()
-  }, [])
-
+  const getAllPosts = async () => {
+    try {
+      const response = await fetch(`${BASE_URL}/api/posts`)
+      const data = await response.json()
+      setPosts(data)
+    } catch (e) {
+      console.error(e)
+      Alert.alert('Error', 'Ошибка соединения с интернетом, попробуйте позже')
+    }
+  }
   const searchHandler = () => {
 
     const filteredPost = posts.filter((elem) => {
@@ -50,36 +54,7 @@ export default function TabOneScreen({ navigation }) {
   }
 
   const clearResults = async () => {
-    try {
-      const response = await fetch(`${BASE_URL}/api/posts`)
-      const data = await response.json()
-      setPosts(data)
-    } catch (e) {
-      console.error(e)
-      Alert.alert('Error', 'Ошибка соединения с интернетом, попробуйте позже')
-    }
-  }
-
-  const editPostHandler = async id => {
-    try {
-      console.log(id)
-      // const response = await fetch(`${BASE_URL}/api/update`, {
-      //   method: 'PUT',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //     Authorization: `Bearer ${user?.token}`,
-      //   },
-      //   body: JSON.stringify({
-      //     ...posts,
-      //     postId
-      //   })
-      // })
-      // const data = await response.json()
-      // setPosts(data)
-    } catch (e) {
-      console.error(e)
-      Alert.alert('Error', 'Ошибка соединения с интернетом, попробуйте позже')
-    }
+    await getAllPosts()
   }
 
   return (
@@ -112,7 +87,8 @@ export default function TabOneScreen({ navigation }) {
         {posts ? <RenderItems
             data={posts}
             user={user}
-            editPostHandler={editPostHandler}/>
+            navigation={navigation}
+            />
               :
             (
               <TouchableOpacity
@@ -140,7 +116,7 @@ const styles = StyleSheet.create({
     paddingVertical: 50,
   },
   searchTitle: {
-    fontSize: 18,
+    fontSize: 14,
     textAlign: 'center',
     marginBottom: 10,
     textTransform: 'uppercase',
