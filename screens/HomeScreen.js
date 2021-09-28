@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {View, StyleSheet, SafeAreaView, TouchableOpacity, Text, Alert, Button} from 'react-native';
+import {View, StyleSheet, SafeAreaView, TouchableOpacity, Text, Alert} from 'react-native';
 
 import InputSearch from '../components/InputSearch';
 import RenderItems from '../components/RenderItems';
@@ -133,10 +133,5 @@ const styles = StyleSheet.create({
     flex: 1,
     marginRight: 3,
     marginLeft: 3
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
   },
 });

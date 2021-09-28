@@ -1,7 +1,9 @@
-import React, {useState, useEffect} from 'react'
+import React from 'react'
 import { View, Text, TextInput, StyleSheet, FlatList } from 'react-native'
+import {Picker} from '@react-native-picker/picker';
 import Colors from '../constants/Colors'
 import {Ionicons} from "@expo/vector-icons";
+import {SHEIKH_NAMES} from '../constants/names'
 
 export default function RenderItems({data, user, navigation}) {
 
@@ -32,6 +34,7 @@ export default function RenderItems({data, user, navigation}) {
               </View>
             }
             <Text style={[styles.text, styles.title]}>{item.question}{' '}?</Text>
+
             <Text style={{fontWeight: '600'}} style={styles.label}>{item?.sheikh}</Text>
             <Text style={styles.original}>{item?.answer}</Text>
             {item?.extra ? <Text style={styles.extra}>{item?.extra}</Text> : null}

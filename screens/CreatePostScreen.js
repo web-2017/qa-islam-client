@@ -1,9 +1,12 @@
 import React, {useState, useEffect} from "react";
-import {View, Text, TouchableOpacity, ScrollView, StyleSheet, TextInput, Alert,} from "react-native";
+import {View, Text, TouchableOpacity, ScrollView, StyleSheet, TextInput, Alert, Platform} from "react-native";
 import Colors from "../constants/Colors";
 import {BASE_URL} from "../api/API";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import RNPickerSelect from 'react-native-picker-select';
+import SHEIKH_NAMES from "../constants/names";
+import {Ionicons} from "@expo/vector-icons";
 
 export default function CreatePostScreen({navigation}) {
     const [question, setQuestion] = useState('');
@@ -11,6 +14,10 @@ export default function CreatePostScreen({navigation}) {
     const [sheikh, setSheikh] = useState('');
     const [extra, setExtra] = useState('');
     const [token, setToken] = useState(null);
+    const [names, setNames] = useState([
+        {label: SHEIKH_NAMES.AbuUmarSositlinskiy, value: SHEIKH_NAMES.AbuUmarSositlinskiy},
+        {label: SHEIKH_NAMES.AbdullahKostekskiy, value: SHEIKH_NAMES.AbdullahKostekskiy},
+    ]);
 
     useEffect(() => {
         (async () => {
@@ -58,13 +65,42 @@ export default function CreatePostScreen({navigation}) {
         }
     }
 
+    const Dropdown = () => {
+        return (
+            <RNPickerSelect
+                placeholder={{
+                    label: 'Выберите шейха из списка...',
+                    value: null,
+                    color: 'red',
+                }}
+                style={{
+                    iconContainer: {
+                        top: -3,
+                        right: -25,
+                    },
+                    placeholder: {
+                        color: 'purple',
+                        fontSize: 12,
+                        fontWeight: 'bold',
+                    },
+                    viewContainer: {...styles.inputIOS}
+                }}
+                Icon={() => {
+                    return <Ionicons name="md-arrow-down" size={24} color="purple" />;
+                }}
+                blurOnSubmit={false}
+                onValueChange={(value) => setSheikh(value)}
+                items={names}
+            />
+        );
+    };
+
     return (
         <ScrollView
             contentContainerStyle={styles.container}
         >
             <Text style={styles.title}>Создать запись</Text>
             {/*<Button onPress={() => navigation.goBack()} title="Go back home" />*/}
-
             <View>
                 <Text>Введите ваш вопрос</Text>
                 <TextInput
@@ -77,12 +113,7 @@ export default function CreatePostScreen({navigation}) {
             </View>
             <View>
                 <Text>Шейх</Text>
-                <TextInput
-                    placeholder={'Шейх'}
-                    onChangeText={(value) => setSheikh(value)}
-                    style={styles.input}
-                    clearButtonMode={'always'}
-                />
+                <Dropdown/>
             </View>
             <View>
                 <Text>Ответ</Text>
@@ -110,6 +141,7 @@ export default function CreatePostScreen({navigation}) {
             >
                 <Text>Создать</Text>
             </TouchableOpacity>
+
         </ScrollView>
     )
 }
@@ -138,5 +170,41 @@ const styles = StyleSheet.create({
     button: {
         marginVertical: 20, backgroundColor: Colors.light.blue, padding: 15,
         borderRadius: 6
-    }
+    },
+    inputIOS: {
+        fontSize: 22,
+        paddingVertical: 12,
+        paddingHorizontal: 10,
+        borderWidth: 1,
+        borderColor: 'gray',
+        borderRadius: 4,
+        color: 'black',
+        minWidth: '90%',
+        maxWidth: '90%',
+        paddingRight: 30, // to ensure the text is never behind the icon
+        marginVertical: 5,
+    },
+});
+
+const pickerSelectStyles = StyleSheet.create({
+    inputIOS: {
+        fontSize: 22,
+        paddingVertical: 12,
+        paddingHorizontal: 10,
+        borderWidth: 1,
+        borderColor: 'gray',
+        borderRadius: 4,
+        color: 'black',
+        paddingRight: 30, // to ensure the text is never behind the icon
+    },
+    inputAndroid: {
+        fontSize: 16,
+        paddingHorizontal: 10,
+        paddingVertical: 8,
+        borderWidth: 0.5,
+        borderColor: 'purple',
+        borderRadius: 8,
+        color: 'black',
+        paddingRight: 30, // to ensure the text is never behind the icon
+    },
 });
