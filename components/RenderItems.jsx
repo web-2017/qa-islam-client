@@ -1,13 +1,34 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import { View, Text, TextInput, StyleSheet, FlatList } from 'react-native'
 import Colors from '../constants/Colors'
+import {Ionicons} from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export default function RenderItems({data}) {
+export default function RenderItems({data, user, editPostHandler}) {
 
   const Item = ({item}) => {
     return  (
       <View style={styles.renderItemStyle}>
           <View key={item._id}>
+            {
+              user?._id &&
+              <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end' }}>
+                <Ionicons
+                    onPress={() => editPostHandler(item._id)}
+                    name={'create-outline'} size={20}
+                    style={{
+                      color: 'green',
+                      textAlign: 'right',
+                    }}
+                />
+                <Ionicons name={'trash-outline'} size={20}
+                          style={{
+                            color: 'red',
+                            textAlign: 'right',
+                          }}
+                />
+              </View>
+            }
             <Text style={[styles.text, styles.title]}>{item.question}{' '}?</Text>
             <Text style={{fontWeight: '600'}} style={styles.label}>{item?.sheikh}</Text>
             <Text style={styles.original}>{item?.answer}</Text>

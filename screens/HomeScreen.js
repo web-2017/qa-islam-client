@@ -6,18 +6,32 @@ import RenderItems from '../components/RenderItems';
 import Colors from '../constants/Colors';
 import constants from "../constants/constants";
 import {BASE_URL} from "../api/API";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function TabOneScreen({ navigation }) {
 
   const [searchText, setSearchText] = useState('')
-  const [data, setData] = useState([])
+  const [posts, setPosts] = useState([])
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    (async () => {
+      const isUser = await AsyncStorage.getItem('user')
+
+      if(typeof isUser === 'string') {
+        const parseIsUser = await JSON.parse(isUser)
+        setUser(parseIsUser)
+      }
+    })()
+  }, []);
+
 
   useEffect(() => {
     (async ()=> {
       try {
         const response = await fetch(`${BASE_URL}/api/posts`)
         const data = await response.json()
-        setData(data)
+        setPosts(data)
       } catch (e) {
         console.error(e)
         Alert.alert('Error', 'Ошибка соединения с интернетом, попробуйте позже')
@@ -28,18 +42,40 @@ export default function TabOneScreen({ navigation }) {
 
   const searchHandler = () => {
 
-    const filteredPost = data.filter((elem) => {
+    const filteredPost = posts.filter((elem) => {
       return elem.question.toLowerCase().includes(searchText.toLowerCase())
     })
 
-    setData(filteredPost)
+    setPosts(filteredPost)
   }
 
   const clearResults = async () => {
     try {
       const response = await fetch(`${BASE_URL}/api/posts`)
       const data = await response.json()
-      setData(data)
+      setPosts(data)
+    } catch (e) {
+      console.error(e)
+      Alert.alert('Error', 'Ошибка соединения с интернетом, попробуйте позже')
+    }
+  }
+
+  const editPostHandler = async id => {
+    try {
+      console.log(id)
+      // const response = await fetch(`${BASE_URL}/api/update`, {
+      //   method: 'PUT',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //     Authorization: `Bearer ${user?.token}`,
+      //   },
+      //   body: JSON.stringify({
+      //     ...posts,
+      //     postId
+      //   })
+      // })
+      // const data = await response.json()
+      // setPosts(data)
     } catch (e) {
       console.error(e)
       Alert.alert('Error', 'Ошибка соединения с интернетом, попробуйте позже')
@@ -73,16 +109,22 @@ export default function TabOneScreen({ navigation }) {
           </View>
         </View>
 
-        {data ? <RenderItems data={data}/>: (
-            <TouchableOpacity
-                style={styles.button}
-                onPress={clearResults}
-            >
-              <Text style={{textAlign: 'center', color: '#fff'}}
-                    onPress={clearResults}
-              >Похоже у вас нет соединения с интернетом, Повторите запрос</Text>
-            </TouchableOpacity>
-        )}
+        {posts ? <RenderItems
+            data={posts}
+            user={user}
+            editPostHandler={editPostHandler}/>
+              :
+            (
+              <TouchableOpacity
+                  style={styles.button}
+                  onPress={clearResults}
+              >
+                <Text style={{textAlign: 'center', color: '#fff'}}
+                      onPress={clearResults}
+                >Похоже у вас нет соединения с интернетом, Повторите запрос</Text>
+              </TouchableOpacity>
+            )
+        }
       </View>
     </SafeAreaView>
   );
