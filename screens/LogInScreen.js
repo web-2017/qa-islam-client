@@ -12,8 +12,6 @@ export default function LogInScreen({navigation}) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-
-
     useEffect(() => {
 
         (async () => {
@@ -24,8 +22,8 @@ export default function LogInScreen({navigation}) {
 
                     const parseUserData = await JSON.parse(isUserExist)
 
-                    if(parseUserData?.user?.role === 'ADMIN') {
-                        navigation.navigate('Create', { name: 'ScreenCreate' })
+                    if(parseUserData?.user?.role === 'USER') {
+                        navigation.navigate('Home', { name: 'Home' })
                     }
                 }
             } catch (e) {
@@ -46,19 +44,21 @@ export default function LogInScreen({navigation}) {
                     email, password
                 })
             })
+
             const data = await response.json()
 
-            const saveInStorage = await storeData(data, 'user')
+            await storeData(data, 'user')
+            console.log(data)
             const readStorageData = await AsyncStorage.getItem('user')
 
-            console.log('saveInStorage', readStorageData)
-            console.log(response.status)
-
             if(response.status === 200) {
-                navigation.navigate('Create', {name: 'Create'})
+                navigation.navigate('Home')
+            } else {
+                Alert.alert(
+                    "Ошибка входа",
+                    `${data.message}`,
+                );
             }
-
-
         } catch (e) {
             console.error(e)
 
@@ -80,6 +80,7 @@ export default function LogInScreen({navigation}) {
                     onChangeText={email => setEmail(email)}
                     defaultValue={email.toLocaleLowerCase()}
                     autoCompleteType={'email'}
+                    autoCapitalize={'none'}
                 />
                 <TextInput
                     style={styles.input}
@@ -87,6 +88,7 @@ export default function LogInScreen({navigation}) {
                     onChangeText={p => setPassword(p)}
                     defaultValue={password}
                     autoCompleteType={'password'}
+                    autoCapitalize={'none'}
                 />
                 <TouchableOpacity
                     style={styles.button}

@@ -1,11 +1,9 @@
 import React from 'react'
 import { View, Text, TextInput, StyleSheet, FlatList } from 'react-native'
-import {Picker} from '@react-native-picker/picker';
 import Colors from '../constants/Colors'
 import {Ionicons} from "@expo/vector-icons";
-import {SHEIKH_NAMES} from '../constants/names'
 
-export default function RenderItems({data, user, navigation}) {
+export default function RenderItems({data, user, navigation, deletePost}) {
 
   const Item = ({item}) => {
     return  (
@@ -25,11 +23,13 @@ export default function RenderItems({data, user, navigation}) {
                       textAlign: 'right',
                     }}
                 />
-                <Ionicons name={'trash-outline'} size={20}
-                          style={{
-                            color: 'red',
-                            textAlign: 'right',
-                          }}
+                <Ionicons
+                    name={'trash-outline'} size={20}
+                    style={{
+                      color: 'red',
+                      textAlign: 'right',
+                    }}
+                    onPress={() => deletePost(item._id)}
                 />
               </View>
             }

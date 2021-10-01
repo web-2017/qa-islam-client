@@ -1,12 +1,12 @@
 import React, {useState, useEffect} from "react";
-import {View, Text, TouchableOpacity, ScrollView, StyleSheet, TextInput, Alert, Platform} from "react-native";
-import Colors from "../constants/Colors";
-import {BASE_URL} from "../api/API";
-
+import {View, Text, TouchableOpacity, ScrollView, StyleSheet, TextInput, Alert} from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import RNPickerSelect from 'react-native-picker-select';
-import SHEIKH_NAMES from "../constants/names";
 import {Ionicons} from "@expo/vector-icons";
+
+import {BASE_URL} from "../api/API";
+import Colors from "../constants/Colors";
+import SHEIKH_NAMES from "../constants/names";
 
 export default function CreatePostScreen({navigation}) {
     const [question, setQuestion] = useState('');
@@ -17,6 +17,7 @@ export default function CreatePostScreen({navigation}) {
     const [names, setNames] = useState([
         {label: SHEIKH_NAMES.AbuUmarSositlinskiy, value: SHEIKH_NAMES.AbuUmarSositlinskiy},
         {label: SHEIKH_NAMES.AbdullahKostekskiy, value: SHEIKH_NAMES.AbdullahKostekskiy},
+        {label: SHEIKH_NAMES.HalidAlFuleidge, value: SHEIKH_NAMES.HalidAlFuleidge},
     ]);
 
     useEffect(() => {
@@ -34,6 +35,7 @@ export default function CreatePostScreen({navigation}) {
     }, []);
 
     const createPostHandler = async () => {
+
         if(!question || !answer || !sheikh) {
             return Alert.alert('Error', 'Все поля обязательны для заполнения')
         }
@@ -55,7 +57,7 @@ export default function CreatePostScreen({navigation}) {
                 setQuestion('')
                 setSheikh('')
                 setAnswer('')
-                return navigation.navigate('Home', {name: 'Home'})
+                 navigation.navigate('Home', {name: 'Home'})
             }
 
             response.status !== 200 && Alert.alert('Error', data.message)
@@ -91,6 +93,7 @@ export default function CreatePostScreen({navigation}) {
                 blurOnSubmit={false}
                 onValueChange={(value) => setSheikh(value)}
                 items={names}
+                value={sheikh}
             />
         );
     };
@@ -109,6 +112,7 @@ export default function CreatePostScreen({navigation}) {
                     onChangeText={(value) => setQuestion(value)}
                     clearButtonMode={'always'}
                     multiline={true}
+                    value={question}
                 />
             </View>
             <View>
@@ -123,6 +127,7 @@ export default function CreatePostScreen({navigation}) {
                     style={styles.input}
                     clearButtonMode={'always'}
                     multiline={true}
+                    value={answer}
                 />
             </View>
             <View>
@@ -133,6 +138,7 @@ export default function CreatePostScreen({navigation}) {
                     style={styles.input}
                     clearButtonMode={'always'}
                     multiline={true}
+                    value={extra}
                 />
             </View>
             <TouchableOpacity
@@ -183,28 +189,5 @@ const styles = StyleSheet.create({
         maxWidth: '90%',
         paddingRight: 30, // to ensure the text is never behind the icon
         marginVertical: 5,
-    },
-});
-
-const pickerSelectStyles = StyleSheet.create({
-    inputIOS: {
-        fontSize: 22,
-        paddingVertical: 12,
-        paddingHorizontal: 10,
-        borderWidth: 1,
-        borderColor: 'gray',
-        borderRadius: 4,
-        color: 'black',
-        paddingRight: 30, // to ensure the text is never behind the icon
-    },
-    inputAndroid: {
-        fontSize: 16,
-        paddingHorizontal: 10,
-        paddingVertical: 8,
-        borderWidth: 0.5,
-        borderColor: 'purple',
-        borderRadius: 8,
-        color: 'black',
-        paddingRight: 30, // to ensure the text is never behind the icon
     },
 });

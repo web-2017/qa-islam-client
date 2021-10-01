@@ -4,18 +4,16 @@
  *
  */
 import React, {useEffect, useState} from 'react';
-import {FontAwesome, Ionicons} from '@expo/vector-icons';
+import {FontAwesome} from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import {createStackNavigator} from "@react-navigation/stack";
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
 import CreatePostScreen from "../screens/CreatePostScreen";
-import NotFoundScreen from '../screens/NotFoundScreen';
 import HomeScreen from '../screens/HomeScreen';
 import LogInScreen from '../screens/LogInScreen.js'
-
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import ModalScreen from "../screens/ModalScreen";
-import {createStackNavigator} from "@react-navigation/stack";
 
 const Drawer = createDrawerNavigator();
 const RootStack = createStackNavigator();
@@ -37,9 +35,10 @@ function RootStackScreen() {
     )
 }
 
-export default function Navigation({navigation}) {
+export default function Navigation() {
     
-    const [isAuth, setIsAuth] = useState(null);
+    const [isAuth, setIsAuth] = useState(false);
+    const [user, setUser] = useState(false);
     
     useEffect(() => {
         (async () => {
@@ -47,27 +46,28 @@ export default function Navigation({navigation}) {
     
             if (typeof user === "string") {
                 const parseData = JSON.parse(user);
-                setIsAuth(parseData)
+                setIsAuth(true)
+                setUser(parseData)
             } else {
                 console.error('Нужна авторизация')
+                setIsAuth(false)
             }
-           
         })()
     }, []);
-    
-    
+
     return (
       <NavigationContainer>
           <Drawer.Navigator>
               <Drawer.Screen
-                  name='Root' component={RootStackScreen}
-                 options={{
-                     headerRight: (() => <Ionicons name={'search'}/>),
-                     title: 'Ислам',
+                    name='Root' component={RootStackScreen}
+                  options={{
+                     // headerRight: (() => <Ionicons name={'search'}/>),
+                     title: 'Главная',
                      headerTitleAlign: 'center',
-                 }}
+                     headerTitle: 'Ислам: Вопрос - Ответ'
+                  }}
               />
-              {isAuth && <Drawer.Screen name='Create' component={CreatePostScreen} />}
+              {isAuth ? <Drawer.Screen name='Create' component={CreatePostScreen} /> : null}
               {!isAuth && <Drawer.Screen name='LogIn' component={LogInScreen} />}
           </Drawer.Navigator>
       </NavigationContainer>

@@ -1,14 +1,14 @@
 import React, {useState, useEffect} from 'react';
-import {View, StyleSheet, SafeAreaView, TouchableOpacity, Text, Alert} from 'react-native';
+import {View, StyleSheet, SafeAreaView, TouchableOpacity, Text, Alert, Button} from 'react-native';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import InputSearch from '../components/InputSearch';
 import RenderItems from '../components/RenderItems';
 import Colors from '../constants/Colors';
 import constants from "../constants/constants";
 import {BASE_URL} from "../api/API";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export default function TabOneScreen({ navigation }) {
+export default function HomeScreen({ navigation }) {
 
   const [searchText, setSearchText] = useState('')
   const [posts, setPosts] = useState([])
@@ -44,6 +44,7 @@ export default function TabOneScreen({ navigation }) {
       Alert.alert('Error', 'Ошибка соединения с интернетом, попробуйте позже')
     }
   }
+
   const searchHandler = () => {
 
     const filteredPost = posts.filter((elem) => {
@@ -54,14 +55,55 @@ export default function TabOneScreen({ navigation }) {
   }
 
   const clearResults = async () => {
+    setSearchText('')
     await getAllPosts()
+  }
+
+  const isDeletedPost = id => {
+    Alert.alert(
+        'Удаление поста',
+    'Вы уверены что хотите удалить статью?',
+        [
+            {
+              text: "Отмена",
+              onPress: () => console.log("Cancel Pressed"),
+              style: "cancel"
+            },
+            { text: "OK", onPress: () => deletePost(id) }
+          ],
+        )
+  }
+
+  const deletePost = async id => {
+    try {
+      await fetch(`${BASE_URL}/api/post-delete/${id}`,{
+        method: 'delete',
+        headers: {
+          Authorization: `Bearer ${user?.token}`,
+        },
+      })
+          .then((msg) => {
+            Alert.alert('Success')
+            getAllPosts()
+          })
+          .catch(err => Alert.alert('Error', err))
+    } catch (e) {
+      Alert.alert('Error delete', e.message)
+    }
   }
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.container}>
         <View style={styles.searchContainer}>
-          <Text style={styles.searchTitle}>{new Date().toLocaleString()}</Text>
+            <Text style={{fontSize: 10}}>{posts?.length} posts</Text>
+            <Text style={styles.searchTitle}>{new Date().toLocaleString()}</Text>
+            {
+              user?._id && user?.user?.role === 'ADMIN' ? <Button title={'выйти'} onPress={() => {
+                AsyncStorage.removeItem('user')
+                navigation.navigate('Home')
+              }}/>
+                  : null
+            }
           <Text style={styles.searchTitle}>{constants.GREETING}</Text>
           <Text style={styles.searchTitle}>{constants.SHAHADA}</Text>
           <InputSearch setSearchText={setSearchText} searchText={searchText} />
@@ -75,33 +117,22 @@ export default function TabOneScreen({ navigation }) {
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.button}
-              onPress={searchHandler}
+              onPress={clearResults}
             >
               <Text style={{textAlign: 'center', color: '#fff'}}
-                onPress={clearResults}
               >Сбросить</Text>
             </TouchableOpacity>
           </View>
         </View>
-
-        {posts ? <RenderItems
-            data={posts}
-            user={user}
-            navigation={navigation}
-            />
-              :
-            (
-              <TouchableOpacity
-                  style={styles.button}
-                  onPress={clearResults}
-              >
-                <Text style={{textAlign: 'center', color: '#fff'}}
-                      onPress={clearResults}
-                >Похоже у вас нет соединения с интернетом, Повторите запрос</Text>
-              </TouchableOpacity>
-            )
-        }
-      </View>
+      {
+            posts.length ?
+            <RenderItems
+                data={posts}
+                user={user}
+                navigation={navigation}
+                deletePost={isDeletedPost}
+            /> : null
+          }
     </SafeAreaView>
   );
 }
@@ -113,7 +144,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff'
   },
   searchContainer: {
-    paddingVertical: 50,
+    paddingVertical: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 1, height: 1 },
+    shadowOpacity:  0.4,
+    shadowRadius: 3,
+    elevation: 5,
   },
   searchTitle: {
     fontSize: 14,
@@ -132,6 +168,6 @@ const styles = StyleSheet.create({
     padding: 10,
     flex: 1,
     marginRight: 3,
-    marginLeft: 3
+    marginLeft: 3,
   },
 });

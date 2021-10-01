@@ -24,6 +24,6 @@ const styles = StyleSheet.create({
     borderColor: Colors.light.green,
     borderWidth: 1,
     borderRadius: 4,
-    padding: 7
+    padding: 7,
   },
 })
