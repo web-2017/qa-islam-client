@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import {View, Text, TouchableOpacity, ScrollView, StyleSheet, TextInput, Alert} from "react-native";
+import {View, Text, TouchableOpacity, ScrollView, StyleSheet, TextInput, Alert, Button} from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import RNPickerSelect from 'react-native-picker-select';
 import {Ionicons} from "@expo/vector-icons";
@@ -57,7 +57,7 @@ export default function CreatePostScreen({navigation}) {
                 setQuestion('')
                 setSheikh('')
                 setAnswer('')
-                 navigation.navigate('Home', {name: 'Home'})
+                navigation.navigate('Home', {name: 'Home'})
             }
 
             response.status !== 200 && Alert.alert('Error', data.message)
@@ -102,6 +102,10 @@ export default function CreatePostScreen({navigation}) {
         <ScrollView
             contentContainerStyle={styles.container}
         >
+            <Button title={'выйти'} onPress={() => {
+                AsyncStorage.removeItem('user')
+                navigation.navigate('Home')
+            }}/>
             <Text style={styles.title}>Создать запись</Text>
             {/*<Button onPress={() => navigation.goBack()} title="Go back home" />*/}
             <View>
