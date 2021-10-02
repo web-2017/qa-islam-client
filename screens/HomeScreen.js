@@ -49,7 +49,6 @@ export default function HomeScreen({ navigation }) {
 
     const filteredPost = posts.filter((elem) => {
       return elem.question.toLowerCase().includes(searchText.toLowerCase())
-      // return elem.question.toLowerCase().startsWith((searchText.toLowerCase()))
     })
 
     setPosts(filteredPost)
