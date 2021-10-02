@@ -2,6 +2,8 @@ import React from 'react'
 import { View, Text, TextInput, StyleSheet, FlatList } from 'react-native'
 import Colors from '../constants/Colors'
 import {Ionicons} from "@expo/vector-icons";
+import {filterReplaceStr} from "../utils/filters/filterReplaceStr";
+
 
 export default function RenderItems({data, user, navigation, deletePost}) {
 
@@ -13,7 +15,6 @@ export default function RenderItems({data, user, navigation, deletePost}) {
               user?._id &&
               <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end' }}>
                 <Ionicons
-                    // onPress={() => editPostHandler(item._id)}
                     onPress={() => navigation.navigate('Modal', {
                       postId: item._id, userToken: user.token,
                     })}
@@ -35,9 +36,9 @@ export default function RenderItems({data, user, navigation, deletePost}) {
             }
             <Text style={[styles.text, styles.title]}>{item.question}{' '}?</Text>
 
-            <Text style={{fontWeight: '600'}} style={styles.label}>{item?.sheikh}</Text>
-            <Text style={styles.original}>{item?.answer}</Text>
-            {item?.extra ? <Text style={styles.extra}>{item?.extra}</Text> : null}
+            <Text style={{fontWeight: '600'}} style={styles.label}>{filterReplaceStr(item?.sheikh)}</Text>
+            <Text style={styles.original}>{filterReplaceStr(item?.answer)}</Text>
+            {item?.extra ? <Text style={styles.extra}>{filterReplaceStr(item?.extra)}</Text> : null}
           </View>
       </View>
     )
