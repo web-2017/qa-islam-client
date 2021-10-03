@@ -4,7 +4,7 @@
  *
  */
 import React, {useEffect, useState} from 'react';
-import {FontAwesome} from '@expo/vector-icons';
+import {FontAwesome, Ionicons} from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {createStackNavigator} from "@react-navigation/stack";
@@ -14,6 +14,15 @@ import CreatePostScreen from "../screens/CreatePostScreen";
 import HomeScreen from '../screens/HomeScreen';
 import LogInScreen from '../screens/LogInScreen.js'
 import ModalScreen from "../screens/ModalScreen";
+import ModalInfoScreen from "../screens/ModalInfoScreen";
+
+// export function navigate() {
+//
+//     if (navigationRef.isReady()) {
+//         navigationRef.navigate();
+//     }
+// }
+
 
 const Drawer = createDrawerNavigator();
 const RootStack = createStackNavigator();
@@ -31,6 +40,9 @@ function RootStackScreen() {
             <RootStack.Group screenOptions={{ presentation: 'modal' }}>
                 <RootStack.Screen name="Modal" component={ModalScreen} />
             </RootStack.Group>
+            <RootStack.Group screenOptions={{ presentation: 'modal' }}>
+                <RootStack.Screen name="ModalInfo" component={ModalInfoScreen} />
+            </RootStack.Group>
         </RootStack.Navigator>
     )
 }
@@ -38,11 +50,12 @@ function RootStackScreen() {
 export default function Navigation() {
     
     const [isAuth, setIsAuth] = useState(false);
-    const [user, setUser] = useState(false);
+    const [user, setUser] = useState(null);
     
     useEffect(() => {
         (async () => {
             const user = await AsyncStorage.getItem('user');
+    
     
             if (typeof user === "string") {
                 const parseData = JSON.parse(user);
@@ -61,14 +74,32 @@ export default function Navigation() {
               <Drawer.Screen
                     name='Root' component={RootStackScreen}
                   options={{
-                     // headerRight: (() => <Ionicons name={'search'}/>),
+                     // headerRight: (() => {
+                     //     return (
+                     //
+                     //         <Ionicons name={'search'} onPress={() =>  props.navigationRef.navigate('Modal')}/>
+                     //
+                     //     )
+                     // }),
                      title: 'Главная',
                      headerTitleAlign: 'center',
                      headerTitle: 'Ислам: Вопрос - Ответ'
                   }}
               />
-              {isAuth ? <Drawer.Screen name='Create' component={CreatePostScreen} /> : null}
-              {!isAuth && <Drawer.Screen name='LogIn' component={LogInScreen} />}
+              {isAuth ? <Drawer.Screen
+                    name='Create'
+                    component={CreatePostScreen}
+                    options={{
+                        title: 'Создать',
+                    }}
+              /> : null}
+              {!isAuth && <Drawer.Screen
+                  name='LogIn'
+                  component={LogInScreen}
+                  options={{
+                      title: 'Войти',
+                  }}
+              />}
           </Drawer.Navigator>
       </NavigationContainer>
   );

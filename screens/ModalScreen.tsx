@@ -26,7 +26,7 @@ export default function ModalScreen({route, navigation}: any) {
                 headers: {
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${token}`,
-              },
+                },
             })
             const post = await response.json()
             
@@ -36,56 +36,56 @@ export default function ModalScreen({route, navigation}: any) {
             setExtra(post.extra)
             
         } catch (e) {
-          console.error(e)
+            console.error(e)
         }
-  }
-  
-  // edit post
-  const editPostHandler = async () => {
-    try {
-        const response = await fetch(`${BASE_URL}/api/update`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify({
-                postId: postId,
-                question,
-                answer,
-                sheikh,
-                extra
-            })
-        })
-    
-        const updatedPost = await response.json()
-    
-        if(response.status === 200) {
-            setExtra('')
-            setQuestion('')
-            setSheikh('')
-            setAnswer('')
-            return navigation.navigate('Home')
-        }
-    
-        response.status !== 200 && Alert.alert('Error', updatedPost.message)
-    }catch (e) {
-        console.error(e)
     }
-  }
-  
-  return (
-      <ScrollView
-          contentContainerStyle={styles.container}
-      >
-        <View style={styles.container}>
-          {/* Use a light status bar on iOS to account for the black space above the modal */}
-          <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
-          <Text style={styles.title}>Only admin</Text>
+    
+    // edit post
+    const editPostHandler = async () => {
+        try {
+            const response = await fetch(`${BASE_URL}/api/update`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({
+                    postId: postId,
+                    question,
+                    answer,
+                    sheikh,
+                    extra
+                })
+            })
             
+            const updatedPost = await response.json()
+            
+            if(response.status === 200) {
+                setExtra('')
+                setQuestion('')
+                setSheikh('')
+                setAnswer('')
+                return navigation.navigate('Home')
+            }
+            
+            response.status !== 200 && Alert.alert('Error', updatedPost.message)
+        }catch (e) {
+            console.error(e)
+        }
+    }
+    
+    return (
+        <ScrollView
+            contentContainerStyle={styles.container}
+        >
+            <View style={styles.container}>
+                {/* Use a light status bar on iOS to account for the black space above the modal */}
+                <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
+                <Text style={styles.title}>Only admin</Text>
+                
                 <Text style={styles.title}>Изменить пост</Text>
                 {/*<Button onPress={() => navigation.goBack()} title="Go back home" />*/}
-            
+                
                 <View>
                     <Text>Введите ваш вопрос</Text>
                     <TextInput
@@ -135,9 +135,9 @@ export default function ModalScreen({route, navigation}: any) {
                 >
                     <Text style={{color: '#fff'}}>Сохранить</Text>
                 </TouchableOpacity>
-        </View>
-    </ScrollView>
-  );
+            </View>
+        </ScrollView>
+    );
 }
 
 const styles = StyleSheet.create({

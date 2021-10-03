@@ -3,7 +3,7 @@ import { StatusBar } from 'expo-status-bar';
 import {Alert, Platform, StyleSheet, TextInput, TouchableOpacity, Text, View, ScrollView} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import {BASE_URL} from "../api/API";
+import {BASE_URL, BASE_URL_ANDROID} from "../api/API";
 import {storeData} from "../config/storage";
 import Colors from "../constants/Colors";
 
@@ -35,7 +35,8 @@ export default function LogInScreen({navigation}) {
 
     const logInHandler = async () => {
         try {
-            const response  = await fetch(`${BASE_URL}/api/signin`, {
+            const response  = await fetch(
+                Platform.OS === 'ios' ?  `${BASE_URL}/api/signin` : `${BASE_URL_ANDROID}/api/signin`, {
                 method: 'POST',
                 headers: {
                     'Content-type': 'application/json'
