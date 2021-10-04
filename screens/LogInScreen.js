@@ -1,9 +1,10 @@
 import React, {useState, useEffect} from 'react';
 import { StatusBar } from 'expo-status-bar';
-import {Alert, Platform, StyleSheet, TextInput, TouchableOpacity, Text, View, ScrollView} from 'react-native';
+import {Alert, Platform, StyleSheet, TouchableOpacity, Text, ScrollView} from 'react-native';
+import {TextInput} from 'react-native-paper'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import {BASE_URL, BASE_URL_ANDROID} from "../api/API";
+import {BASE_URL} from "../api/API";
 import {storeData} from "../config/storage";
 import Colors from "../constants/Colors";
 
@@ -11,6 +12,7 @@ import Colors from "../constants/Colors";
 export default function LogInScreen({navigation}) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [isShowPassword, setIsShowPassword] = useState('eye-off');
 
     useEffect(() => {
 
@@ -36,7 +38,7 @@ export default function LogInScreen({navigation}) {
     const logInHandler = async () => {
         try {
             const response  = await fetch(
-                Platform.OS === 'ios' ?  `${BASE_URL}/api/signin` : `${BASE_URL_ANDROID}/api/signin`, {
+                 `${BASE_URL}/api/signin`, {
                 method: 'POST',
                 headers: {
                     'Content-type': 'application/json'
@@ -48,11 +50,8 @@ export default function LogInScreen({navigation}) {
 
             const data = await response.json()
 
-            await storeData(data, 'user')
-            console.log(data)
-            const readStorageData = await AsyncStorage.getItem('user')
-
             if(response.status === 200) {
+                await storeData(data, 'user')
                 navigation.navigate('Home')
             } else {
                 Alert.alert(
@@ -70,6 +69,11 @@ export default function LogInScreen({navigation}) {
         }
     }
 
+    const changeIcon = () => {
+        const isIcon = isShowPassword === 'eye-off' ? 'eye' :  'eye-off'
+        setIsShowPassword(isIcon)
+    }
+
     return (
         <ScrollView contentContainerStyle={styles.container}>
             {/* Use a light status bar on iOS to account for the black space above the modal */}
@@ -77,7 +81,7 @@ export default function LogInScreen({navigation}) {
                 <Text style={styles.title}>Only admin</Text>
                 <TextInput
                     style={styles.input}
-                    placeholder='email'
+                    label='email'
                     onChangeText={email => setEmail(email)}
                     defaultValue={email.toLocaleLowerCase()}
                     autoCompleteType={'email'}
@@ -85,11 +89,13 @@ export default function LogInScreen({navigation}) {
                 />
                 <TextInput
                     style={styles.input}
-                    placeholder='password'
+                    label='password'
                     onChangeText={p => setPassword(p)}
                     defaultValue={password}
                     autoCompleteType={'password'}
                     autoCapitalize={'none'}
+                    secureTextEntry={isShowPassword === 'eye-off'}
+                    right={<TextInput.Icon name={isShowPassword} onPress={() => changeIcon()} />}
                 />
                 <TouchableOpacity
                     style={styles.button}
@@ -106,15 +112,15 @@ export default function LogInScreen({navigation}) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center',
+        // alignItems: 'center',
         justifyContent: 'center',
     },
     input: {
-        borderRadius: 5,
-        borderWidth: 1,
-        borderColor: Colors.light.blue,
-        padding: 5,
-        minWidth: '90%',
+        // borderRadius: 5,
+        // borderWidth: 1,
+        // borderColor: Colors.light.blue,
+        // padding: 5,
+        // minWidth: '90%',
         marginVertical: 5
     },
     button: {

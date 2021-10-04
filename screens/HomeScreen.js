@@ -1,14 +1,16 @@
 import React, {useEffect, useState} from 'react';
 import {Alert, Button, Platform, SafeAreaView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useTheme } from '@react-navigation/native';
 
 import InputSearch from '../components/InputSearch';
 import RenderItems from '../components/RenderItems';
 import Colors from '../constants/Colors';
 import constants from "../constants/constants";
-import {BASE_URL, BASE_URL_ANDROID} from "../api/API";
+import {BASE_URL} from "../api/API";
 
 export default function HomeScreen({ navigation }) {
+  const theme = useTheme();
 
   const [searchText, setSearchText] = useState('')
   const [posts, setPosts] = useState([])
@@ -34,7 +36,7 @@ export default function HomeScreen({ navigation }) {
 
   const getAllPosts = async () => {
     try {
-      const response = await fetch(Platform.OS === 'ios' ?  `${BASE_URL}/api/posts` : `${BASE_URL_ANDROID}/api/posts`)
+      const response = await fetch( `${BASE_URL}/api/posts`)
       const data = await response.json()
       setPosts(data)
     } catch (e) {
