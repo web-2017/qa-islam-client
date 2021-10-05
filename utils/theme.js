@@ -40,15 +40,15 @@ export const fontConfig = {
             fontWeight: 'normal',
         },
         medium: {
-            fontFamily: 'space-mono-medium',
+            fontFamily: 'space-mono',
             fontWeight: 'normal',
         },
         light: {
-            fontFamily: 'space-mono-light',
+            fontFamily: 'space-mono',
             fontWeight: 'normal',
         },
         thin: {
-            fontFamily: 'space-mono-thin',
+            fontFamily: 'space-mono',
             fontWeight: 'normal',
         },
     },
@@ -58,15 +58,15 @@ export const fontConfig = {
             fontWeight: 'normal',
         },
         medium: {
-            fontFamily: 'space-mono-medium',
+            fontFamily: 'space-mono',
             fontWeight: 'normal',
         },
         light: {
-            fontFamily: 'space-mono-light',
+            fontFamily: 'space-mono',
             fontWeight: 'normal',
         },
         thin: {
-            fontFamily: 'space-mono-thin',
+            fontFamily: 'space-mono',
             fontWeight: 'normal',
         },
     }

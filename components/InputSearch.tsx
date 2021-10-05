@@ -1,15 +1,11 @@
-import React, {useState} from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import React from 'react'
 import { TextInput } from 'react-native-paper';
-
-import Colors from '../constants/Colors'
 
 export default function InputSearch({searchText, setSearchText}: {searchText: string, setSearchText: Function}) {
   
   return (
-    <View>
+    <>
       {/* input */}
-      <View>
         <TextInput
             label="Поиск"
             value={searchText}
@@ -17,17 +13,7 @@ export default function InputSearch({searchText, setSearchText}: {searchText: st
             dense
             clearButtonMode={'always'}
         />
-      </View>
-    </View>
+    </>
    
   )
 }
-
-const styles = StyleSheet.create({
-  searchInput: {
-    borderColor: Colors.light.green,
-    borderWidth: 1,
-    borderRadius: 4,
-    padding: 7,
-  },
-})
