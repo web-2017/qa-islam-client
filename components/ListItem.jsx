@@ -1,6 +1,8 @@
 import React from "react";
 import {FlatList, Text, View, StyleSheet} from "react-native";
-import {Ionicons} from "@expo/vector-icons";
+import {Title, Subheading, Paragraph, Caption, Chip} from "react-native-paper";
+import {Ionicons, SimpleLineIcons} from "@expo/vector-icons";
+import { FontAwesome } from '@expo/vector-icons';
 
 import {filterReplaceStr} from "../utils/filters/filterReplaceStr";
 import Colors from "../constants/Colors";
@@ -34,11 +36,14 @@ export default function ListItem({data, user, navigation, deletePost}) {
                             />
                         </View>
                     }
-                    <Text style={[styles.text, styles.title]}>{item.question}{' '}?</Text>
+                    <Title>{item.question}{' '}?</Title>
+                    <Chip mode={'flat'} color="green">
+                        <FontAwesome name="user-circle-o" size={20} color="green" />
+                        {' '}{item?.sheikh}
+                    </Chip>
 
-                    <Text style={{fontWeight: '600'}} style={styles.label}>{filterReplaceStr(item?.sheikh)}</Text>
-                    <Text style={styles.original}>{filterReplaceStr(item?.answer)}</Text>
-                    {item?.extra ? <Text style={styles.extra}>{filterReplaceStr(item?.extra)}</Text> : null}
+                    <Subheading style={styles.original}>{filterReplaceStr(item?.answer)}</Subheading>
+                    {item?.extra ? <Subheading style={styles.extra}>{filterReplaceStr(item?.extra)}</Subheading> : null}
                 </View>
             </View>
         )
