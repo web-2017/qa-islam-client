@@ -1,5 +1,5 @@
 import React from "react";
-import {FlatList, Text, View, StyleSheet} from "react-native";
+import {FlatList, Text, View, StyleSheet, ActivityIndicator} from "react-native";
 import {Title, Subheading, Paragraph, Caption, Chip} from "react-native-paper";
 import {Ionicons, SimpleLineIcons} from "@expo/vector-icons";
 import { FontAwesome } from '@expo/vector-icons';
@@ -7,7 +7,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import {filterReplaceStr} from "../utils/filters/filterReplaceStr";
 import Colors from "../constants/Colors";
 
-export default function ListItem({data, user, navigation, deletePost}) {
+export default function ListItem({data, user, navigation, getAllPosts, deletePost}) {
 
     const Item = ({item}) => {
         return  (
@@ -36,7 +36,7 @@ export default function ListItem({data, user, navigation, deletePost}) {
                             />
                         </View>
                     }
-                    <Title>{item.question}{' '}?</Title>
+                    <Title>{filterReplaceStr(item.question)}{' '}?</Title>
                     <Chip mode={'flat'} color="green">
                         <FontAwesome name="user-circle-o" size={20} color="green" />
                         {' '}{item?.sheikh}
@@ -51,12 +51,15 @@ export default function ListItem({data, user, navigation, deletePost}) {
 
     const renderItem = ({ item }) => <Item item={item}/>
     return (
+        data ?
         <FlatList
             data={data}
             renderItem={renderItem}
             keyExtractor={item => item._id}
             extraData={data}
         />
+            :
+            <ActivityIndicator size="large" color={Colors.light.green} style={{flex: 1, justifyContent: 'center'}} />
     )
 }
 

@@ -36,6 +36,7 @@ export default function HomeScreen({ navigation }) {
   }, [navigation]);
 
   const getAllPosts = async () => {
+    console.log(1)
     try {
       const response = await fetch( `${BASE_URL}/api/posts`)
       const data = await response.json()
@@ -111,6 +112,7 @@ export default function HomeScreen({ navigation }) {
                 user={user}
                 navigation={navigation}
                 deletePost={isDeletedPost}
+                getAllPosts={getAllPosts}
             /> : null
           }
     </SafeAreaView>
