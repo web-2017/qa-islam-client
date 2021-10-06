@@ -1,6 +1,16 @@
 import React, {useState, useEffect} from 'react';
 import { StatusBar } from 'expo-status-bar';
-import {Platform, StyleSheet, TextInput, TouchableOpacity, Text, View, ScrollView, Alert} from 'react-native';
+import {
+    Platform,
+    StyleSheet,
+    TextInput,
+    TouchableOpacity,
+    Text,
+    View,
+    ScrollView,
+    Alert,
+    ActivityIndicator
+} from 'react-native';
 
 import {BASE_URL} from "../api/API";
 import Colors from "../constants/Colors";
@@ -13,6 +23,7 @@ export default function ModalScreen({route, navigation}: any) {
     const [sheikh, setSheikh] = useState('');
     const [extra, setExtra] = useState('');
     const [token, setToken] = useState(userToken);
+    const [isLoading, setIsLoading] = useState(false);
     
     useEffect(() => {
         getCurrentPost()
@@ -22,6 +33,7 @@ export default function ModalScreen({route, navigation}: any) {
     // read post
     const getCurrentPost = async () => {
         try {
+            setIsLoading(true)
             const response  = await fetch(`${BASE_URL}/api/post/${postId}`, {
                 headers: {
                     'Content-Type': 'application/json',
@@ -30,10 +42,15 @@ export default function ModalScreen({route, navigation}: any) {
             })
             const post = await response.json()
             
-            setQuestion(post.question)
-            setAnswer(post.answer)
-            setSheikh(post.sheikh)
-            setExtra(post.extra)
+            
+            
+            if(response.status == 200) {
+                setQuestion(post.question)
+                setAnswer(post.answer)
+                setSheikh(post.sheikh)
+                setExtra(post.extra)
+                setIsLoading(false)
+            }
             
         } catch (e) {
             console.error(e)
@@ -85,56 +102,63 @@ export default function ModalScreen({route, navigation}: any) {
                 
                 <Text style={styles.title}>Изменить пост</Text>
                 {/*<Button onPress={() => navigation.goBack()} title="Go back home" />*/}
-                
-                <View>
-                    <Text>Введите ваш вопрос</Text>
-                    <TextInput
-                        placeholder={'Вопрос'}
-                        style={styles.input}
-                        onChangeText={(value) => setQuestion(value)}
-                        clearButtonMode={'always'}
-                        multiline={true}
-                        defaultValue={question}
-                    />
-                </View>
-                <View>
-                    <Text>Шейх</Text>
-                    <TextInput
-                        placeholder={'Шейх'}
-                        onChangeText={(value) => setSheikh(value)}
-                        style={styles.input}
-                        clearButtonMode={'always'}
-                        defaultValue={sheikh}
-                    />
-                </View>
-                <View>
-                    <Text>Ответ</Text>
-                    <TextInput
-                        placeholder={'answer'}
-                        onChangeText={(value) => setAnswer(value)}
-                        style={styles.input}
-                        clearButtonMode={'always'}
-                        multiline={true}
-                        defaultValue={answer}
-                    />
-                </View>
-                <View>
-                    <Text>Дополнительно</Text>
-                    <TextInput
-                        placeholder={'Дополнительно'}
-                        onChangeText={(value) => setExtra(value)}
-                        style={styles.input}
-                        clearButtonMode={'always'}
-                        multiline={true}
-                        defaultValue={extra}
-                    />
-                </View>
-                <TouchableOpacity
-                    onPress={() => editPostHandler()}
-                    style={styles.button}
-                >
-                    <Text style={{color: '#fff'}}>Сохранить</Text>
-                </TouchableOpacity>
+                {
+                    isLoading ? <ActivityIndicator size="large" color={Colors.light.green} style={{flex: 1, justifyContent: 'center'}} />
+                        :
+                        
+                    <>
+                        <View>
+                            <Text>Введите ваш вопрос</Text>
+                            <TextInput
+                                placeholder={'Вопрос'}
+                                style={styles.input}
+                                onChangeText={(value) => setQuestion(value)}
+                                clearButtonMode={'always'}
+                                multiline={true}
+                                defaultValue={question}
+                            />
+                        </View>
+                        <View>
+                            <Text>Шейх</Text>
+                            <TextInput
+                                placeholder={'Шейх'}
+                                onChangeText={(value) => setSheikh(value)}
+                                style={styles.input}
+                                clearButtonMode={'always'}
+                                defaultValue={sheikh}
+                            />
+                        </View>
+                        <View>
+                            <Text>Ответ</Text>
+                            <TextInput
+                                placeholder={'answer'}
+                                onChangeText={(value) => setAnswer(value)}
+                                style={styles.input}
+                                clearButtonMode={'always'}
+                                multiline={true}
+                                defaultValue={answer}
+                            />
+                        </View>
+                        <View>
+                            <Text>Дополнительно</Text>
+                            <TextInput
+                                placeholder={'Дополнительно'}
+                                onChangeText={(value) => setExtra(value)}
+                                style={styles.input}
+                                clearButtonMode={'always'}
+                                multiline={true}
+                                defaultValue={extra}
+                            />
+                        </View>
+                        <TouchableOpacity
+                            onPress={() => editPostHandler()}
+                            style={styles.button}
+                        >
+                            <Text style={{color: '#fff'}}>Сохранить</Text>
+                        </TouchableOpacity>
+                    </>
+                }
+
             </View>
         </ScrollView>
     );

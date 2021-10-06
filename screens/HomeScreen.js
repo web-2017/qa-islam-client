@@ -1,14 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {Alert, Button, SafeAreaView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Alert, SafeAreaView, StyleSheet} from 'react-native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useTheme } from '@react-navigation/native';
 
-import InputSearch from '../components/InputSearch';
 import {List} from '../components/List';
-import Colors from '../constants/Colors';
-import constants from "../constants/constants";
 import {BASE_URL} from "../api/API";
 import {Header} from "../components/Header";
+import {MainContainer} from "../components/MainContainer";
 
 export default function HomeScreen({ navigation }) {
   const theme = useTheme();
@@ -36,7 +34,6 @@ export default function HomeScreen({ navigation }) {
   }, [navigation]);
 
   const getAllPosts = async () => {
-    console.log(1)
     try {
       const response = await fetch( `${BASE_URL}/api/posts`)
       const data = await response.json()
@@ -96,16 +93,17 @@ export default function HomeScreen({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header
-          posts={posts}
-          user={user}
-          navigation={navigation}
-          setSearchText={setSearchText}
-          searchText={searchText}
-          searchHandler={searchHandler}
-          clearResults={clearResults}
-      />
-      {
+      <MainContainer>
+        <Header
+            posts={posts}
+            user={user}
+            navigation={navigation}
+            setSearchText={setSearchText}
+            searchText={searchText}
+            searchHandler={searchHandler}
+            clearResults={clearResults}
+        />
+        {
             posts.length ?
             <List
                 data={posts}
@@ -114,7 +112,8 @@ export default function HomeScreen({ navigation }) {
                 deletePost={isDeletedPost}
                 getAllPosts={getAllPosts}
             /> : null
-          }
+        }
+      </MainContainer>
     </SafeAreaView>
   );
 }

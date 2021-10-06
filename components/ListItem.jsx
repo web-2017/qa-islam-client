@@ -36,7 +36,7 @@ export default function ListItem({data, user, navigation, getAllPosts, deletePos
                             />
                         </View>
                     }
-                    <Title>{filterReplaceStr(item.question)}{' '}?</Title>
+                    <Title style={styles.title}>{filterReplaceStr(item.question)}{' '}?</Title>
                     <Chip mode={'flat'} color="green">
                         <FontAwesome name="user-circle-o" size={20} color="green" />
                         {' '}{item?.sheikh}
