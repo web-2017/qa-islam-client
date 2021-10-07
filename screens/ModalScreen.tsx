@@ -21,6 +21,7 @@ export default function ModalScreen({route, navigation}: any) {
     const [question, setQuestion] = useState('');
     const [answer, setAnswer] = useState('');
     const [sheikh, setSheikh] = useState('');
+    const [videoLink, setVideoLink] = useState('');
     const [extra, setExtra] = useState('');
     const [token, setToken] = useState(userToken);
     const [isLoading, setIsLoading] = useState(false);
@@ -50,6 +51,7 @@ export default function ModalScreen({route, navigation}: any) {
                 setSheikh(post.sheikh)
                 setExtra(post.extra)
                 setIsLoading(false)
+                setVideoLink(post.videoLink)
             }
             
         } catch (e) {
@@ -71,7 +73,8 @@ export default function ModalScreen({route, navigation}: any) {
                     question,
                     answer,
                     sheikh,
-                    extra
+                    extra,
+                    videoLink
                 })
             })
             
@@ -82,6 +85,7 @@ export default function ModalScreen({route, navigation}: any) {
                 setQuestion('')
                 setSheikh('')
                 setAnswer('')
+                setVideoLink('')
                 return navigation.navigate('Home')
             }
             
@@ -148,6 +152,17 @@ export default function ModalScreen({route, navigation}: any) {
                                 clearButtonMode={'always'}
                                 multiline={true}
                                 defaultValue={extra}
+                            />
+                        </View>
+                        <View>
+                            <Text>Видео ссылка</Text>
+                            <TextInput
+                                placeholder={'Дополнительно'}
+                                onChangeText={(value) => setVideoLink(value)}
+                                style={styles.input}
+                                clearButtonMode={'always'}
+                                multiline={true}
+                                defaultValue={videoLink}
                             />
                         </View>
                         <TouchableOpacity

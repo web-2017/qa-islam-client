@@ -12,6 +12,7 @@ export default function CreatePostScreen({navigation}) {
     const [question, setQuestion] = useState('');
     const [answer, setAnswer] = useState('');
     const [sheikh, setSheikh] = useState('');
+    const [videoLink, setVideoLink] = useState('');
     const [extra, setExtra] = useState('');
     const [token, setToken] = useState(null);
     const [names, setNames] = useState([
@@ -47,7 +48,7 @@ export default function CreatePostScreen({navigation}) {
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${token}`,
                 },
-                body: JSON.stringify({question, answer, sheikh, extra})
+                body: JSON.stringify({question, answer, sheikh, extra, videoLink})
             })
 
             const data = await response.json()
@@ -109,7 +110,7 @@ export default function CreatePostScreen({navigation}) {
             <Text style={styles.title}>Создать запись</Text>
             {/*<Button onPress={() => navigation.goBack()} title="Go back home" />*/}
             <View>
-                <Text>Введите ваш вопрос</Text>
+                <Text>Введите ваш вопрос*</Text>
                 <TextInput
                     placeholder={'Вопрос'}
                     style={styles.input}
@@ -120,11 +121,11 @@ export default function CreatePostScreen({navigation}) {
                 />
             </View>
             <View>
-                <Text>Шейх</Text>
+                <Text>Шейх*</Text>
                 <Dropdown/>
             </View>
             <View>
-                <Text>Ответ</Text>
+                <Text>Ответ*</Text>
                 <TextInput
                     placeholder={'answer'}
                     onChangeText={(value) => setAnswer(value)}
@@ -135,7 +136,7 @@ export default function CreatePostScreen({navigation}) {
                 />
             </View>
             <View>
-                <Text>Дополнительно</Text>
+                <Text>Дополнительно (Не обязательно)</Text>
                 <TextInput
                     placeholder={'Дополнительно'}
                     onChangeText={(value) => setExtra(value)}
@@ -143,6 +144,16 @@ export default function CreatePostScreen({navigation}) {
                     clearButtonMode={'always'}
                     multiline={true}
                     value={extra}
+                />
+            </View>
+            <View>
+                <Text>Видео (Не обязательно)</Text>
+                <TextInput
+                    placeholder={'Не обязательно'}
+                    onChangeText={(value) => setVideoLink(value)}
+                    style={styles.input}
+                    clearButtonMode={'always'}
+                    value={videoLink}
                 />
             </View>
             <TouchableOpacity
