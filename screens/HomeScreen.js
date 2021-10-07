@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Alert, Linking, SafeAreaView, StyleSheet, Text} from 'react-native';
+import {Alert, SafeAreaView, StyleSheet} from 'react-native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useTheme } from '@react-navigation/native';
 
@@ -103,28 +103,6 @@ export default function HomeScreen({ navigation }) {
             searchHandler={searchHandler}
             clearResults={clearResults}
         />
-       <>
-         <Text
-             style={{marginTop:30}}
-             onPress={() => {
-               Linking.openURL(
-                   // 'http://api.whatsapp.com/send?phone=1' + '8473125422' + '?text=11111',
-                   `http://api.whatsapp.com/send?text=asdads`
-               );
-             }}>
-           Send WhatsApp Message
-         </Text>
-         <Text
-           style={{marginTop:30}}
-           onPress={() => {
-             Linking.openURL(
-                 'sms: 8473125422',
-                 'asdfasd'
-             );
-           }}>
-         Send  Message
-       </Text>
-       </>
         {
             posts.length ?
             <List
