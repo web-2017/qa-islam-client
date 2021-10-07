@@ -1,8 +1,3 @@
-/**
- * If you are not familiar with React Navigation, refer to the "Fundamentals" guide:
- * https://reactnavigation.org/docs/getting-started
- *
- */
 import React, {useEffect, useState} from 'react';
 import {FontAwesome, Ionicons} from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
@@ -15,14 +10,6 @@ import HomeScreen from '../screens/HomeScreen';
 import LogInScreen from '../screens/LogInScreen.js'
 import ModalScreen from "../screens/ModalScreen";
 import ModalInfoScreen from "../screens/ModalInfoScreen";
-
-// export function navigate() {
-//
-//     if (navigationRef.isReady()) {
-//         navigationRef.navigate();
-//     }
-// }
-
 
 const Drawer = createDrawerNavigator();
 const RootStack = createStackNavigator();

@@ -2,7 +2,6 @@ import * as React from "react";
 import {Button} from "react-native-paper";
 
 export const CustomButton = (props) => {
-    console.log(props)
     return (
          <Button
              {...props}

@@ -8,6 +8,7 @@ import Colors from "../constants/Colors";
 
 export const Header = ({posts, user, navigation, setSearchText, searchText, searchHandler, clearResults}) => {
     return (
+
         <View style={styles.searchContainer}>
             <Text style={{fontSize: 10}}>{posts?.length} posts</Text>
             <Text style={styles.searchTitle}>{new Date().toLocaleString()}</Text>

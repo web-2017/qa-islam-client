@@ -1,7 +1,7 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { Provider as PaperProvider, configureFonts } from 'react-native-paper';
+import {Provider as PaperProvider, configureFonts} from 'react-native-paper';
 import * as Font from 'expo-font';
 
 import useCachedResources from './hooks/useCachedResources';
@@ -33,7 +33,7 @@ export default function App() {
     return (
       <SafeAreaProvider>
         <PaperProvider theme={theme}>
-           <Navigation colorScheme={colorScheme} theme={theme}  />
+            <Navigation colorScheme={colorScheme} theme={theme}  />
         </PaperProvider>
         <StatusBar />
       </SafeAreaProvider>

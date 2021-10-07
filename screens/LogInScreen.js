@@ -11,8 +11,8 @@ import {CustomButton} from "../components/CustomButton";
 
 
 export default function LogInScreen({navigation}) {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [email, setEmail] = useState(process.env.NODE_ENV === 'development' ? 'admin@gmail.com' : '');
+    const [password, setPassword] = useState(process.env.NODE_ENV === 'development' ? 'addqddadd' : '');
     const [isShowPassword, setIsShowPassword] = useState('eye-off');
 
     useEffect(() => {
