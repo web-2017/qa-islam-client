@@ -124,7 +124,7 @@ export const FlatListItem = ({item, deletePost, user, navigation}) => {
                     />
                 </View>
 
-                <Divider style={{backgroundColor: Colors.light.lightBrown, marginVertical: 30, height: 1}}/>
+                {/*<Divider style={{backgroundColor: Colors.light.lightBrown, marginVertical: 30, height: 1}}/>*/}
             </View>
         </View>
     )

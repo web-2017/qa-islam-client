@@ -49,7 +49,6 @@ export default function Navigation() {
                 setIsAuth(true)
                 setUser(parseData)
             } else {
-                console.error('Нужна авторизация')
                 setIsAuth(false)
             }
         })()

@@ -33,7 +33,7 @@ export default function App() {
     return (
       <SafeAreaProvider>
         <PaperProvider theme={theme}>
-            <Navigation colorScheme={colorScheme} theme={theme}  />
+            <Navigation theme={theme}  />
         </PaperProvider>
         <StatusBar />
       </SafeAreaProvider>
