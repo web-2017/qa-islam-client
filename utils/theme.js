@@ -1,3 +1,5 @@
+import React from "react";
+
 export const CustomTheme = {
     dark: false,
     roundness: 4,
@@ -16,40 +18,22 @@ export const CustomTheme = {
 };
 
 export const fontConfig = {
-    web: {
-        regular: {
-            fontFamily: 'space-mono',
-            fontWeight: 'normal',
-        },
-        medium: {
-            fontFamily: 'space-mono-medium',
-            fontWeight: 'normal',
-        },
-        light: {
-            fontFamily: 'space-mono-light',
-            fontWeight: 'normal',
-        },
-        thin: {
-            fontFamily: 'sans-serif-thin',
-            fontWeight: 'normal',
-        },
-    },
     ios: {
         regular: {
             fontFamily: 'space-mono',
-            fontWeight: 'normal',
+            fontWeight: '400',
         },
         medium: {
             fontFamily: 'space-mono',
-            fontWeight: 'normal',
+            fontWeight: '400',
         },
         light: {
             fontFamily: 'space-mono',
-            fontWeight: 'normal',
+            fontWeight: '400',
         },
         thin: {
             fontFamily: 'space-mono',
-            fontWeight: 'normal',
+            fontWeight: '400',
         },
     },
     android: {
@@ -69,5 +53,5 @@ export const fontConfig = {
             fontFamily: 'space-mono',
             fontWeight: 'normal',
         },
-    }
+    },
 };
