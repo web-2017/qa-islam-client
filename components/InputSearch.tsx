@@ -9,13 +9,12 @@ export default function InputSearch({searchText, setSearchText}: {searchText: st
       {/* input */}
         <TextInput
             label="Введите ваш вопрос"
-            mode={'flat'}
+            mode={'outlined'}
             value={searchText}
             onChangeText={text => setSearchText(text)}
-            dense
+            // dense
             clearButtonMode={'always'}
             selectionColor={Colors.light.blue}
-            style={{paddingBottom: 5}}
         />
     </>
    

@@ -1,7 +1,7 @@
 import React from 'react';
 import {StatusBar} from 'expo-status-bar';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
-import {Provider as PaperProvider} from 'react-native-paper';
+import {Provider as PaperProvider, DefaultTheme} from 'react-native-paper';
 
 import useCachedResources from './hooks/useCachedResources';
 import Navigation from './navigation';
@@ -16,8 +16,8 @@ export default function App() {
         return (
             <UserProvider>
                 <SafeAreaProvider>
-                    <PaperProvider>
-                        <Navigation/>
+                    <PaperProvider theme={DefaultTheme}>
+                        <Navigation />
                     </PaperProvider>
                     <StatusBar/>
                 </SafeAreaProvider>
