@@ -1,24 +1,27 @@
-import React from "react";
+import React, {useContext} from "react";
 import {Button, StyleSheet, Text, TouchableOpacity, View} from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import constants from "../constants/constants";
 import InputSearch from "./InputSearch";
 import Colors from "../constants/Colors";
+import {UserContext} from "../store/userContext";
 
-export const Header = ({posts, user, navigation, setSearchText, searchText, searchHandler, clearResults}) => {
+export const Header = ({posts, navigation, setSearchText, searchText, searchHandler, clearResults}) => {
+    const [stateUser, setStateUser] = useContext(UserContext);
     return (
 
         <View style={styles.searchContainer}>
             <Text style={{fontSize: 10}}>{posts?.length} posts</Text>
             <Text style={styles.searchTitle}>{new Date().toLocaleString()}</Text>
+
             {
-                user?._id && user?.user?.role === 'ADMIN' ? <Button title={'выйти'} onPress={() => {
-                        AsyncStorage.removeItem('user')
+                stateUser?._id && stateUser?.user?.role === 'ADMIN' ? <Button title={'выйти'} onPress={() => {
+                        setStateUser(null)
                         navigation.navigate('Home')
                     }}/>
                     : null
             }
+
             <Text style={styles.searchTitle}>{constants.GREETING}</Text>
             <Text style={styles.searchTitle}>{constants.SHAHADA}</Text>
             <InputSearch setSearchText={setSearchText} searchText={searchText} />

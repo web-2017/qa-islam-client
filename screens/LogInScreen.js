@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import { StatusBar } from 'expo-status-bar';
 import {Alert, Platform, StyleSheet, TouchableOpacity, Text, ScrollView, View} from 'react-native';
 import {TextInput, Button} from 'react-native-paper'
@@ -8,9 +8,11 @@ import {BASE_URL} from "../api/API";
 import {storeData} from "../config/storage";
 import Colors from "../constants/Colors";
 import {CustomButton} from "../components/CustomButton";
+import {UserContext} from "../store/userContext";
 
 
 export default function LogInScreen({navigation}) {
+    const [stateUser, setStateUser] = useContext(UserContext);
     const [email, setEmail] = useState(process.env.NODE_ENV === 'development' ? 'admin@gmail.com' : '');
     const [password, setPassword] = useState(process.env.NODE_ENV === 'development' ? 'addqddadd' : '');
     const [isShowPassword, setIsShowPassword] = useState('eye-off');
@@ -53,6 +55,7 @@ export default function LogInScreen({navigation}) {
 
             if(response.status === 200) {
                 await storeData(data, 'user')
+                setStateUser(data)
                 navigation.navigate('Home')
             } else {
                 Alert.alert(

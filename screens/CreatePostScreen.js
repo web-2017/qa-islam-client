@@ -1,43 +1,30 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useContext} from "react";
 import {View, Text, TouchableOpacity, ScrollView, StyleSheet, TextInput, Alert, Button} from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import RNPickerSelect from 'react-native-picker-select';
 import {Ionicons} from "@expo/vector-icons";
 
 import {BASE_URL} from "../api/API";
 import Colors from "../constants/Colors";
 import SHEIKH_NAMES from "../constants/names";
+import {UserContext} from "../store/userContext";
 
 export default function CreatePostScreen({navigation}) {
+    const [stateUser, setStateUser] = useContext(UserContext);
     const [question, setQuestion] = useState('');
     const [answer, setAnswer] = useState('');
     const [sheikh, setSheikh] = useState('');
     const [videoLink, setVideoLink] = useState('');
     const [extra, setExtra] = useState('');
-    const [token, setToken] = useState(null);
     const [names, setNames] = useState([
         {label: SHEIKH_NAMES.AbuUmarSositlinskiy, value: SHEIKH_NAMES.AbuUmarSositlinskiy},
         {label: SHEIKH_NAMES.AbdullahKostekskiy, value: SHEIKH_NAMES.AbdullahKostekskiy},
         {label: SHEIKH_NAMES.HalidAlFuleidge, value: SHEIKH_NAMES.HalidAlFuleidge},
     ]);
 
-    useEffect(() => {
-        (async () => {
-            const storageToken = await AsyncStorage.getItem('user')
-            if( typeof storageToken === 'string') {
-                const parseData =  JSON.parse(storageToken)
-                setToken(parseData?.token)
-            }  else {
-                Alert.alert('Error Token', 'Вы не вошли');
-                setToken(null)
-                navigation.navigate('LogIn', {name: 'LogIn'});
-            }
-        })()
-    }, []);
 
     const createPostHandler = async () => {
 
-        if(!question || !answer || !sheikh) {
+        if (!question || !answer || !sheikh) {
             return Alert.alert('Error', 'Все поля обязательны для заполнения')
         }
 
@@ -46,14 +33,14 @@ export default function CreatePostScreen({navigation}) {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`,
+                    Authorization: `Bearer ${stateUser?.token}`,
                 },
                 body: JSON.stringify({question, answer, sheikh, extra, videoLink})
             })
 
             const data = await response.json()
 
-            if(response.status === 200) {
+            if (response.status === 200) {
                 setExtra('')
                 setQuestion('')
                 setSheikh('')
@@ -89,7 +76,7 @@ export default function CreatePostScreen({navigation}) {
                     viewContainer: {...styles.inputIOS}
                 }}
                 Icon={() => {
-                    return <Ionicons name="md-arrow-down" size={24} color="purple" />;
+                    return <Ionicons name="md-arrow-down" size={24} color="purple"/>;
                 }}
                 blurOnSubmit={false}
                 onValueChange={(value) => setSheikh(value)}
@@ -104,7 +91,7 @@ export default function CreatePostScreen({navigation}) {
             contentContainerStyle={styles.container}
         >
             <Button title={'выйти'} onPress={() => {
-                AsyncStorage.removeItem('user')
+                setStateUser(null)
                 navigation.navigate('Home')
             }}/>
             <Text style={styles.title}>Создать запись</Text>
