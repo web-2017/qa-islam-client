@@ -1,15 +1,18 @@
-import React, {useRef} from "react";
+import React, {useContext, useRef} from "react";
 import {StyleSheet, View, Share, Text, Linking, Platform} from "react-native";
 import {FontAwesome, Ionicons, MaterialIcons} from "@expo/vector-icons";
-import {Chip, Divider, Paragraph, Subheading, Title} from "react-native-paper";
+import {Chip, Paragraph, Title} from "react-native-paper";
 import WebView from "react-native-webview";
 
 import {filterReplaceStr} from "../utils/filters/filterReplaceStr";
 import Colors from "../constants/Colors";
+import {UserContext} from "../store/userContext";
 
 
 export const FlatListItem = ({item, deletePost, user, navigation}) => {
     const ref = useRef(null);
+
+    const [stateUser, setStateUser] = useContext(UserContext);
 
     const onShare = async ({msg}) => {
         try {
@@ -36,10 +39,9 @@ export const FlatListItem = ({item, deletePost, user, navigation}) => {
     };
 
     return  (
-        <View style={styles.renderItemStyle}>
-            <View key={item._id}>
+        <View style={styles.container} key={item._id}>
                 {
-                    user?._id &&
+                    stateUser?._id &&
                     <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end' }}>
                         <Ionicons
                             onPress={() => navigation.navigate('Modal', {
@@ -125,14 +127,13 @@ export const FlatListItem = ({item, deletePost, user, navigation}) => {
                 </View>
 
                 {/*<Divider style={{backgroundColor: Colors.light.lightBrown, marginVertical: 30, height: 1}}/>*/}
-            </View>
         </View>
     )
 }
 
 const styles = StyleSheet.create({
-    renderItemStyle: {
-        color: '#000',
+    container: {
+        flex: 1,
     },
     title: {
         fontSize: 20,

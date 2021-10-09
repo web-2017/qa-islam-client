@@ -17,27 +17,6 @@ export default function LogInScreen({navigation}) {
     const [password, setPassword] = useState(process.env.NODE_ENV === 'development' ? 'addqddadd' : '');
     const [isShowPassword, setIsShowPassword] = useState('eye-off');
 
-    useEffect(() => {
-
-        (async () => {
-            try {
-                const isUserExist = await AsyncStorage.getItem('user')
-
-                if(isUserExist) {
-
-                    const parseUserData = await JSON.parse(isUserExist)
-
-                    if(parseUserData?.user?.role === 'USER') {
-                        navigation.navigate('Home', { name: 'Home' })
-                    }
-                }
-            } catch (e) {
-                console.error(e)
-            }
-        })();
-
-    }, []);
-
     const logInHandler = async () => {
         try {
             const response  = await fetch(
