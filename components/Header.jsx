@@ -1,30 +1,19 @@
-import React, {useContext} from "react";
-import {Button, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import React from "react";
+import {StyleSheet, Text, TouchableOpacity, View} from "react-native";
 
 import constants from "../constants/constants";
 import InputSearch from "./InputSearch";
 import Colors from "../constants/Colors";
-import {UserContext} from "../store/userContext";
 
-export const Header = ({posts, navigation, setSearchText, searchText, searchHandler, clearResults}) => {
-    const [stateUser, setStateUser] = useContext(UserContext);
+export const Header = ({posts, setSearchText, searchText, searchHandler, clearResults}) => {
     return (
 
         <View style={styles.searchContainer}>
             <Text style={{fontSize: 10}}>{posts?.length} posts</Text>
             <Text style={styles.searchTitle}>{new Date().toLocaleString()}</Text>
-
-            {
-                stateUser?._id && stateUser?.user?.role === 'ADMIN' ? <Button title={'выйти'} onPress={() => {
-                        setStateUser(null)
-                        navigation.navigate('Home')
-                    }}/>
-                    : null
-            }
-
             <Text style={styles.searchTitle}>{constants.GREETING}</Text>
             <Text style={styles.searchTitle}>{constants.SHAHADA}</Text>
-            <InputSearch setSearchText={setSearchText} searchText={searchText} />
+            <InputSearch setSearchText={setSearchText} searchText={searchText}/>
 
             <View style={{flexDirection: 'row'}}>
                 <TouchableOpacity
@@ -54,8 +43,8 @@ const styles = StyleSheet.create({
     searchContainer: {
         paddingVertical: 20,
         shadowColor: '#000',
-        shadowOffset: { width: 1, height: 1 },
-        shadowOpacity:  0.4,
+        shadowOffset: {width: 1, height: 1},
+        shadowOpacity: 0.4,
         shadowRadius: 3,
         elevation: 5,
     },

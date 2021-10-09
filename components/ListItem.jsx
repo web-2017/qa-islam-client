@@ -8,7 +8,7 @@ export default function ListItem({data, user, navigation, deletePost}) {
 
     const keyExtractor = useCallback(item => item?._id.toString(), [])
 
-    const FlatListItemHandler = useCallback(({ item }) =>
+    const FlatListItemHandler = useCallback(({item}) =>
         <FlatListItem
             item={item}
             user={user}
@@ -18,15 +18,15 @@ export default function ListItem({data, user, navigation, deletePost}) {
 
     return (
         data ?
-        <FlatList
-            data={data}
-            keyExtractor={keyExtractor}
-            extraData={data}
-            initialNumToRender={5}
-            renderItem={FlatListItemHandler}
-        />
+            <FlatList
+                data={data}
+                keyExtractor={keyExtractor}
+                extraData={data}
+                initialNumToRender={5}
+                renderItem={FlatListItemHandler}
+            />
             :
-            <ActivityIndicator size="large" color={Colors.light.green} style={{flex: 1, justifyContent: 'center'}} />
+            <ActivityIndicator size="large" color={Colors.light.green} style={{flex: 1, justifyContent: 'center'}}/>
     )
 }
 
