@@ -1,7 +1,7 @@
 import React, {useContext, useRef} from "react";
 import {StyleSheet, View, Share, Text, Linking, Platform} from "react-native";
 import {FontAwesome, Ionicons, MaterialIcons} from "@expo/vector-icons";
-import {Chip, Paragraph, Title} from "react-native-paper";
+import {Chip, Divider, Paragraph, Title} from "react-native-paper";
 import WebView from "react-native-webview";
 
 import {filterReplaceStr} from "../utils/filters/filterReplaceStr";
@@ -124,7 +124,7 @@ export const FlatListItem = ({item, deletePost, user, navigation}) => {
                 />
             </View>
 
-            {/*<Divider style={{backgroundColor: Colors.light.lightBrown, marginVertical: 30, height: 1}}/>*/}
+            <Divider style={{backgroundColor: Colors.light.lightBrown, marginVertical: 30, height: 1}}/>
         </View>
     )
 }
@@ -132,6 +132,7 @@ export const FlatListItem = ({item, deletePost, user, navigation}) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+
     },
     title: {
         fontSize: 20,
@@ -140,8 +141,10 @@ const styles = StyleSheet.create({
     socials: {
         flex: 1,
         flexDirection: "row",
-        justifyContent: 'flex-end',
-        alignItems: 'center'
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+        backgroundColor: '#0001',
+        paddingHorizontal: 15
     },
     label: {
         backgroundColor: '#444',

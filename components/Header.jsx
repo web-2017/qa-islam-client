@@ -4,12 +4,13 @@ import {StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import constants from "../constants/constants";
 import InputSearch from "./InputSearch";
 import Colors from "../constants/Colors";
+import {Badge} from "react-native-paper";
 
 export const Header = ({posts, setSearchText, searchText, searchHandler, clearResults}) => {
     return (
 
         <View style={styles.searchContainer}>
-            <Text style={{fontSize: 10}}>{posts?.length} posts</Text>
+            <Badge size={23}>{posts?.length}</Badge>
             <Text style={styles.searchTitle}>{new Date().toLocaleString()}</Text>
             <Text style={styles.searchTitle}>{constants.GREETING}</Text>
             <Text style={styles.searchTitle}>{constants.SHAHADA}</Text>
