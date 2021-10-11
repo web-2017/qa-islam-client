@@ -4,14 +4,12 @@ import {FlatList, ActivityIndicator} from "react-native";
 import Colors from "../constants/Colors";
 import {FlatListItem} from "./FlatListItem";
 
-export default function ListItem({data, user, navigation, deletePost}) {
-
+export default function ListItem({data, navigation, deletePost}) {
     const keyExtractor = useCallback(item => item?._id.toString(), [])
 
     const FlatListItemHandler = useCallback(({item}) =>
         <FlatListItem
             item={item}
-            user={user}
             deletePost={deletePost}
             navigation={navigation}
         />, [])

@@ -9,7 +9,8 @@ import Colors from "../constants/Colors";
 import {UserContext} from "../store/userContext";
 
 
-export const FlatListItem = ({item, deletePost, user, navigation}) => {
+export const FlatListItem = ({item, deletePost, navigation}) => {
+
     const ref = useRef(null);
 
     const [stateUser, setStateUser] = useContext(UserContext);
@@ -45,7 +46,7 @@ export const FlatListItem = ({item, deletePost, user, navigation}) => {
                 <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end'}}>
                     <Ionicons
                         onPress={() => navigation.navigate('Modal', {
-                            postId: item._id, userToken: user.token,
+                            postId: item?._id, userToken: stateUser.token,
                         })}
                         name={'create-outline'} size={20}
                         style={{
@@ -59,7 +60,7 @@ export const FlatListItem = ({item, deletePost, user, navigation}) => {
                             color: 'red',
                             textAlign: 'right',
                         }}
-                        onPress={() => deletePost(item._id)}
+                        onPress={() => deletePost(item?._id)}
                     />
                 </View>
             }
@@ -91,7 +92,18 @@ export const FlatListItem = ({item, deletePost, user, navigation}) => {
                     name={'share'} size={20}
                     style={{marginVertical: 4}}
                     color={Colors.light.blue}
-                    onPress={() => onShare({msg: `${item.question}; ${item.sheikh}; ${item.answer}`})}
+                    onPress={() =>
+                        onShare(
+                        {
+                                msg: `
+                                Вопрос: ${filterReplaceStr(item.question)}?;\n
+                                Шейх: ${item.sheikh};\n
+                                Ответ: ${filterReplaceStr(item.answer)};\n
+                                Видео: ${item.videoLink ? item.videoLink : 'Нету'}
+                                `
+                            }
+                        )
+                    }
                 />
                 <FontAwesome
                     name="whatsapp" size={20} style={{margin: 10}} color={Colors.light.green}
