@@ -1,12 +1,13 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {Alert, SafeAreaView, StyleSheet, View} from 'react-native';
-import {Title} from "react-native-paper";
+import {Alert, SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import {Title, Paragraph} from "react-native-paper";
 
 import {Header} from "../components/Header";
 import {MainContainer} from "../components/MainContainer";
 import {List} from '../components/List';
 import {BASE_URL} from "../api/API";
 import {UserContext} from "../store/userContext";
+import {CustomButton} from '../components/CustomButton.jsx'
 
 export default function HomeScreen({navigation}) {
 
@@ -99,7 +100,13 @@ export default function HomeScreen({navigation}) {
                             getAllPosts={getAllPosts}
                         /> :
                         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                            <Title>Загрузка...</Title>
+                            <Title>Подождите...</Title>
+                            <Paragraph>Ответ не найдет, или соединение с интернетом прервано, пожалуйста повторите попытку</Paragraph>
+                            <CustomButton onPress={() => {
+                                getAllPosts()
+                                setSearchText('')
+                            }
+                            } style={{marginVertical: 10}}>Обновить</CustomButton>
                         </View>
                 }
             </MainContainer>
