@@ -45,6 +45,7 @@ export default function CreatePostScreen({navigation}) {
                 setQuestion('')
                 setSheikh('')
                 setAnswer('')
+                setVideoLink('')
                 navigation.navigate('Home', {name: 'Home'})
             }
 
