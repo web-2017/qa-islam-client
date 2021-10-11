@@ -1,13 +1,16 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Alert, SafeAreaView, StyleSheet, View} from 'react-native';
-import {Text} from "react-native-paper";
+import {Title} from "react-native-paper";
 
 import {Header} from "../components/Header";
 import {MainContainer} from "../components/MainContainer";
 import {List} from '../components/List';
 import {BASE_URL} from "../api/API";
+import {UserContext} from "../store/userContext";
 
 export default function HomeScreen({navigation}) {
+
+    const [stateUser, setStateUser] = useContext(UserContext);
 
     const [searchText, setSearchText] = useState('')
     const [posts, setPosts] = useState([])
@@ -62,7 +65,7 @@ export default function HomeScreen({navigation}) {
             await fetch(`${BASE_URL}/api/post-delete/${id}`, {
                 method: 'delete',
                 headers: {
-                    Authorization: `Bearer ${user?.token}`,
+                    Authorization: `Bearer ${stateUser?.token}`,
                 },
             })
                 .then((msg) => {
@@ -88,16 +91,15 @@ export default function HomeScreen({navigation}) {
                     clearResults={clearResults}
                 />
                 {
-                    posts.length ?
+                    posts?.length ?
                         <List
                             data={posts}
                             navigation={navigation}
                             deletePost={isDeletedPost}
                             getAllPosts={getAllPosts}
                         /> :
-                        <View style={{marginVertical: 30}}>
-
-                            <Text>Нет результата "Нажмите сбросить" и поищите другой вопрос</Text>
+                        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                            <Title>Загрузка...</Title>
                         </View>
                 }
             </MainContainer>
