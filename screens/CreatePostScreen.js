@@ -106,6 +106,7 @@ export default function CreatePostScreen({navigation}) {
                     clearButtonMode={'always'}
                     multiline={true}
                     value={question}
+                    autoCorrect={false}
                 />
             </View>
             <View>
@@ -121,6 +122,7 @@ export default function CreatePostScreen({navigation}) {
                     clearButtonMode={'always'}
                     multiline={true}
                     value={answer}
+                    autoCorrect={false}
                 />
             </View>
             <View>
@@ -132,6 +134,7 @@ export default function CreatePostScreen({navigation}) {
                     clearButtonMode={'always'}
                     multiline={true}
                     value={extra}
+                    autoCorrect={false}
                 />
             </View>
             <View>

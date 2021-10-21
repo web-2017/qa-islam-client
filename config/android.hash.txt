@@ -1,0 +1,5 @@
+Accessing credentials for mario0285 in project qa-islam
+Google Certificate Fingerprint:     59:C6:87:13:CD:F2:26:E6:F1:9D:D2:55:66:C7:60:32:2C:02:83:08
+Google Certificate Hash (SHA-1):    59C68713CDF226E6F19DD25566C760322C028308
+Google Certificate Hash (SHA-256):  936FB2B10ABDDF1F580EB4CB91E49D590E1DA335EF15CF1E599D7817C92F90AB
+Facebook Key Hash:                  WcaHE83yJubxndJVZsdgMiwCgwg=
