@@ -75,7 +75,7 @@ export const FlatListItem = ({item, deletePost, navigation}) => {
             {
                 item?.videoLink && item?.videoLink.includes('http') ?
                     <WebView
-                        style={{height: 200}}
+                        style={{height: 160}}
                         javaScriptEnabled={true}
                         domStorageEnabled={true}
                         ref={ref}
@@ -144,7 +144,6 @@ export const FlatListItem = ({item, deletePost, navigation}) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-
     },
     title: {
         fontSize: 20,
@@ -155,17 +154,8 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: 'flex-start',
         alignItems: 'center',
-        backgroundColor: '#0001',
+        // backgroundColor: '#0001',
         paddingHorizontal: 15
-    },
-    label: {
-        backgroundColor: '#444',
-        color: '#fff',
-        padding: 5,
-        paddingLeft: 7,
-        borderRadius: 5,
-        overflow: "hidden",
-        textTransform: 'capitalize'
     },
     original: {
         backgroundColor: '#ccc',
@@ -177,12 +167,15 @@ const styles = StyleSheet.create({
         textAlign: 'justify',
     },
     extra: {
-        backgroundColor: Colors.light.green,
-        color: '#fff',
+        // backgroundColor: Colors.light.green,
+        borderWidth: 1,
+        borderColor: Colors.light.green,
+        color: Colors.light.lightBrown,
         borderRadius: 5,
         padding: 15,
         fontSize: 16,
         textAlign: 'justify',
+        marginVertical: 5
     },
     video: {
         alignSelf: 'center',
